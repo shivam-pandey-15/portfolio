@@ -1,4 +1,4 @@
-import { ArrowRight, Network, Layers, Search, CheckCircle2, Cpu, Zap } from "lucide-react";
+import { ArrowRight, Network, Layers, Search, CheckCircle2, Cpu, Zap, ArrowDown } from "lucide-react";
 import Link from "next/link";
 
 export default function Vectors() {
@@ -20,8 +20,10 @@ export default function Vectors() {
             <section className="space-y-8">
                 <h2 className="text-3xl font-bold">Meaning as Mathematical Coordinates</h2>
                 <p className="text-foreground leading-relaxed">
-                    Modern embedding models convert text into vectors — fixed-length arrays of numbers that encode semantic meaning.
-                    Similar concepts produce similar vectors, enabling "find things like this" queries.
+                    How do you explain the meaning of "Queen" to a computer? You don't. You convert it into coordinates.
+                    Modern embedding models (like OpenAI's text-embedding-3 or BERT) convert text into "vectors"—fixed-length
+                    arrays of numbers that position concepts in a multi-dimensional semantic space. In this space, similarity isn't
+                    about shared letters; it's about proximity. "Cat" and "Kitten" are neighbors, even though they share no characters.
                 </p>
 
                 <div className="bg-zinc-900 rounded-xl p-6">
@@ -80,9 +82,11 @@ export default function Vectors() {
             {/* The Brute Force Problem */}
             <section className="space-y-8">
                 <h2 className="text-3xl font-bold">The Brute Force Problem</h2>
-                <p className="text-foreground">
-                    Finding the nearest neighbors requires computing the distance to every vector.
-                    With 100 million vectors, that's 100 million distance calculations per query — far too slow.
+                <p className="text-foreground leading-relaxed">
+                    To find the closest match in this space, the naive approach is to measure the distance from your query vector
+                    to <em>every single document vector</em> in your database. This is called "Exact kNN". It works perfectly for small datasets,
+                    but the math is heavy. With 100 million documents and 768 dimensions per vector, a single query requires ~76 billion
+                    floating-point operations. That takes seconds—far too slow for search.
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-8">
@@ -109,9 +113,11 @@ export default function Vectors() {
             {/* HNSW Visualization */}
             <section className="space-y-8">
                 <h2 className="text-3xl font-bold">HNSW: Hierarchical Navigable Small World</h2>
-                <p className="text-foreground">
-                    HNSW builds layers of "express highways" that enable logarithmic search complexity.
-                    Upper layers have few nodes with long-range connections; lower layers have all nodes with local connections.
+                <p className="text-foreground leading-relaxed">
+                    To solve the scalability problem, we trade a tiny bit of accuracy for massive speed. HNSW is the state-of-the-art
+                    algorithm for this. It builds a multi-layered graph, similar to a highway system. The top layers are "expressways"
+                    with few stops (long links) that let you jump across the semantic universe quickly. As you get closer to your destination,
+                    you drop down to "local roads" (dense connections) to find the exact neighborhood.
                 </p>
 
                 <div className="bg-zinc-900 rounded-xl p-8">
@@ -153,6 +159,72 @@ export default function Vectors() {
                     <div className="mt-6 bg-zinc-800 p-4 rounded-lg text-zinc-300 text-sm text-center">
                         Search starts at top layer (big jumps), then drills down (smaller jumps).
                         <div className="text-green-400 font-bold mt-1">Result: ~150 distance comparisons instead of 100,000,000</div>
+                    </div>
+                </div>
+            </section>
+
+            {/* What is actually stored */}
+            <section className="space-y-6">
+                <h2 className="text-3xl font-bold">What is Actually Stored? (HNSW Internals)</h2>
+                <p className="text-foreground leading-relaxed">
+                    It's easy to think of an index as "just the vectors". But HNSW is a graph.
+                    On disk, it stores:
+                </p>
+                <div className="grid md:grid-cols-2 gap-6">
+                    <div className="bg-zinc-900 rounded-xl p-5">
+                        <div className="flex items-center gap-3 mb-3">
+                            <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                            <span className="font-bold text-zinc-100">Nodes (Vectors)</span>
+                        </div>
+                        <p className="text-sm text-zinc-400">
+                            The raw floating-point arrays (e.g., 768 floats per document).
+                            Heavy on storage.
+                        </p>
+                    </div>
+                    <div className="bg-zinc-900 rounded-xl p-5">
+                        <div className="flex items-center gap-3 mb-3">
+                            <div className="w-3 h-3 rounded-full bg-none border-2 border-blue-500"></div>
+                            <span className="font-bold text-zinc-100">Edges (Proximity)</span>
+                        </div>
+                        <p className="text-sm text-zinc-400">
+                            Adjacency lists connecting each node to its M closest neighbors.
+                            The graph approximates a Delaunay Triangulation.
+                        </p>
+                    </div>
+                </div>
+                <p className="text-foreground mt-4 leading-relaxed">
+                    <strong>How is it built?</strong> One vector at a time. When you insert a document, the system "searches"
+                    for its nearest neighbors in the existing graph and draws edges to them. This greedy construction is
+                    fast but approximate.
+                </p>
+            </section>
+
+            {/* Where Vector Search Fits */}
+            <section className="space-y-6">
+                <h2 className="text-3xl font-bold">Where It Fits in the Search System</h2>
+                <div className="bg-amber-100 border-l-4 border-amber-500 p-4 rounded-r-xl">
+                    <p className="font-bold text-amber-900 text-sm">
+                        Critical Concept: Vector Search is for Recall, not Ranking.
+                    </p>
+                </div>
+                <p className="text-foreground leading-relaxed">
+                    A common misconception is that vector search replaces the whole search engine. It doesn't.
+                    It replaces the <strong>Recall Stage</strong> (generating candidates).
+                </p>
+                <div className="bg-zinc-900 rounded-xl p-8 font-mono text-sm text-zinc-100 space-y-6">
+                    <div className="flex items-center gap-4">
+                        <div className="bg-blue-600 px-3 py-1 rounded text-white font-bold w-24 text-center">1. Recall</div>
+                        <div>Fetch top 1,000 candidates via <span className="text-green-400">Vectors (Meaning)</span> + <span className="text-amber-400">Keywords (Exact)</span></div>
+                    </div>
+                    <div className="flex justify-center -my-2 ml-12"><ArrowDown className="w-5 h-5 text-zinc-600" /></div>
+                    <div className="flex items-center gap-4">
+                        <div className="bg-purple-600 px-3 py-1 rounded text-white font-bold w-24 text-center">2. Blend</div>
+                        <div>Normalize scores and merge lists (RRF or Linear Combination)</div>
+                    </div>
+                    <div className="flex justify-center -my-2 ml-12"><ArrowDown className="w-5 h-5 text-zinc-600" /></div>
+                    <div className="flex items-center gap-4">
+                        <div className="bg-green-600 px-3 py-1 rounded text-white font-bold w-24 text-center">3. Rank</div>
+                        <div>Apply business rules (In Stock?) and strict LTR models</div>
                     </div>
                 </div>
             </section>
@@ -207,9 +279,9 @@ export default function Vectors() {
                     <p className="text-sm text-blue-900">
                         Higher <code className="bg-blue-100 px-1 rounded">num_candidates</code> = more accurate but slower.
                         <br />
-                        <strong>num_candidates: 50</strong> — fast, ~85% recall
+                        <strong>num_candidates: 50</strong>  fast, ~85% recall
                         <br />
-                        <strong>num_candidates: 200</strong> — slower, ~98% recall
+                        <strong>num_candidates: 200</strong>  slower, ~98% recall
                     </p>
                 </div>
             </section>
@@ -217,10 +289,53 @@ export default function Vectors() {
             {/* HNSW Parameters */}
             <section className="space-y-6">
                 <h2 className="text-3xl font-bold">HNSW Parameters (Tuning Guide)</h2>
-                <p className="text-foreground leading-relaxed">
-                    HNSW has three key parameters that control the tradeoff between search quality, speed, and memory.
-                    The right settings depend on your use case—is recall critical, or is speed more important?
+                <p className="text-foreground leading-relaxed mb-6">
+                    HNSW has three knobs that control the "Triangle of Trade-offs": <strong>Speed</strong>, <strong>Accuracy (Recall)</strong>, and <strong>Memory</strong>.
+                    Understanding these is key to tuning your cluster.
                 </p>
+                <div className="grid gap-6 mb-8">
+                    <div className="border border-border p-4 rounded-xl space-y-2 bg-zinc-50/50">
+                        <div className="flex justify-between items-center">
+                            <h3 className="font-bold text-foreground font-mono text-lg">m (Max Connections)</h3>
+                            <span className="text-xs bg-zinc-200 px-2 py-1 rounded text-zinc-900 border border-zinc-300 font-bold">Build-time</span>
+                        </div>
+                        <p className="text-sm text-foreground">
+                            <strong>Analogy:</strong> The number of friends each person keeps in their phone book.
+                        </p>
+                        <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-1">
+                            <li><strong>High M (e.g., 64)</strong>: Each node connects to many neighbors. You can jump to a destination in fewer hops. <span className="text-green-600 font-bold">Great recall</span>, but the index structure effectively consumes significantly more RAM per document.</li>
+                            <li><strong>Low M (e.g., 16)</strong>: Each node knows few others. Small index footprint and fast updates, but you might get "stuck" in a local neighborhood and miss the true nearest neighbor.</li>
+                        </ul>
+                    </div>
+
+                    <div className="border border-border p-4 rounded-xl space-y-2 bg-zinc-50/50">
+                        <div className="flex justify-between items-center">
+                            <h3 className="font-bold text-foreground font-mono text-lg">ef_construction</h3>
+                            <span className="text-xs bg-zinc-200 px-2 py-1 rounded text-zinc-900 border border-zinc-300 font-bold">Build-time</span>
+                        </div>
+                        <p className="text-sm text-foreground">
+                            <strong>Analogy:</strong> How thorough you are when vetting new friends.
+                        </p>
+                        <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-1">
+                            <li><strong>High ef (e.g., 200)</strong>: When adding a document, the system scans 200 candidates to find the <i>absolute optimal</i> `M` connections. The graph quality is pristine, but indexing CPU usage spikes.</li>
+                            <li><strong>Low ef (e.g., 50)</strong>: We just grab the first decent neighbors we find. Indexing is fast, but the graph is "messy", leading to potentially worse search results later.</li>
+                        </ul>
+                    </div>
+
+                    <div className="border border-border p-4 rounded-xl space-y-2 bg-blue-50/50">
+                        <div className="flex justify-between items-center">
+                            <h3 className="font-bold text-blue-900 font-mono text-lg">ef_search / num_candidates</h3>
+                            <span className="text-xs bg-blue-100 px-2 py-1 rounded text-blue-900 border border-blue-300 font-bold">Query-time</span>
+                        </div>
+                        <p className="text-sm text-blue-900">
+                            <strong>Analogy:</strong> How many people you ask for directions at each intersection.
+                        </p>
+                        <ul className="text-sm text-blue-800 list-disc pl-5 space-y-1">
+                            <li><strong>High (e.g., 100)</strong>: You carefully explore many possible paths. You almost certainly find the target, but latency increases.</li>
+                            <li><strong>Low (e.g., 10)</strong>: You rush down the first promising path. Ultra-fast, but you might mistakenly arrive at a local optimum (incorrect match) rather than the global optimum.</li>
+                        </ul>
+                    </div>
+                </div>
 
                 <div className="overflow-x-auto rounded-xl border-2 border-border">
                     <table className="w-full text-sm">
@@ -267,9 +382,20 @@ export default function Vectors() {
             {/* Hybrid Search */}
             <section className="space-y-6">
                 <h2 className="text-3xl font-bold">Hybrid Search: Keywords + Vectors</h2>
-                <p className="text-foreground">
-                    Combine BM25 keyword matching with vector similarity for the best of both worlds.
-                </p>
+                <div className="text-foreground leading-relaxed">
+                    <p className="mb-4">Why use both? Because they solve opposite problems:</p>
+                    <ul className="list-disc pl-5 space-y-2">
+                        <li>
+                            <strong>Keyword Search (BM25)</strong> is precise but brittle. It finds "iPhone 15" but misses "Apple Phone".
+                        </li>
+                        <li>
+                            <strong>Vector Search (HNSW)</strong> is broad but fuzzy. It finds "Apple Phone" but might return "Samsung Phone" (semantically close).
+                        </li>
+                        <li>
+                            <strong>Hybrid Search</strong> combines them: vectors for <i>recall</i> (finding concepts) and keywords for <i>precision</i> (matching exact models).
+                        </li>
+                    </ul>
+                </div>
 
                 <div className="rounded-xl overflow-hidden border-2 border-zinc-300">
                     <div className="bg-zinc-200 px-4 py-2 text-sm font-mono text-zinc-700 border-b border-zinc-300">
@@ -311,6 +437,12 @@ export default function Vectors() {
             {/* Memory & Quantization */}
             <section className="space-y-6">
                 <h2 className="text-3xl font-bold">Memory & Quantization</h2>
+                <p className="text-foreground leading-relaxed">
+                    Vectors are heavy. A single 768-dimensional vector takes 3KB (floats). Multiply by 100 million documents,
+                    and you need 300GB of RAM just for vectors. This gets expensive fast.
+                    <strong>Quantization</strong> solves this by compressing 32-bit floats into 8-bit integers (or even 1-bit binaries),
+                    sacrificing a tiny bit of precision for massive memory savings.
+                </p>
 
                 <div className="bg-zinc-900 rounded-xl p-6">
                     <div className="text-zinc-400 text-sm mb-4">Storage Formula: num_docs × dims × bytes_per_float</div>
@@ -338,6 +470,10 @@ export default function Vectors() {
             {/* Common Pitfalls */}
             <section className="space-y-6">
                 <h2 className="text-3xl font-bold">Common Pitfalls</h2>
+                <p className="text-foreground leading-relaxed">
+                    Implementing vector search is deceptive. It looks easy ("just index the vectors!"), but the complexity hides in the operational details.
+                    Here are the two ways teams most often destroy their search relevance.
+                </p>
 
                 <div className="grid md:grid-cols-2 gap-6">
                     <div className="rounded-xl border-2 border-red-300 bg-red-50 p-5">
@@ -367,10 +503,58 @@ export default function Vectors() {
                 </div>
             </section>
 
+            {/* Failure Modes */}
+            <section className="space-y-6">
+                <h2 className="text-3xl font-bold">When Vector Search Fails</h2>
+                <p className="text-foreground leading-relaxed">
+                    Vector search is magical, but it's not a silver bullet. If you remove keyword search entirely,
+                    you will likely degrade the user experience in these specific scenarios:
+                </p>
+                <div className="grid md:grid-cols-2 gap-4">
+                    <div className="border p-5 rounded-xl bg-red-50 border-red-200">
+                        <h4 className="font-bold text-red-900 mb-2">1. Exact SKU/ID Search</h4>
+                        <p className="text-sm text-red-800 leading-relaxed">
+                            <strong>Query:</strong> "iPhone 15 Pro Max 256GB"<br />
+                            Vectors typically treat "128GB" and "256GB" as semantically identical synonyms.
+                            Users searching for parts or IDs need exact character matching.
+                        </p>
+                    </div>
+                    <div className="border p-5 rounded-xl bg-red-50 border-red-200">
+                        <h4 className="font-bold text-red-900 mb-2">2. Out-of-Vocabulary Jargon</h4>
+                        <p className="text-sm text-red-800 leading-relaxed">
+                            <strong>Query:</strong> "X7000-Z Turbo"<br />
+                            If the model has never seen this specific model number, it will hallucinate the closest concept (e.g., "fast car").
+                            Keywords would correctly return 0 results.
+                        </p>
+                    </div>
+                    <div className="border p-5 rounded-xl bg-red-50 border-red-200">
+                        <h4 className="font-bold text-red-900 mb-2">3. Short/Ambiguous Queries</h4>
+                        <p className="text-sm text-red-800 leading-relaxed">
+                            <strong>Query:</strong> "GAP"<br />
+                            A vector model might map this to "Space", "Interval", or "Clothing".
+                            Without behavioral data, the vector space is often too broad.
+                        </p>
+                    </div>
+                    <div className="border p-5 rounded-xl bg-red-50 border-red-200">
+                        <h4 className="font-bold text-red-900 mb-2">4. Distribution Shift</h4>
+                        <p className="text-sm text-red-800 leading-relaxed">
+                            Models are trained on Wikipedia/Internet data. Your documents are niche technical manuals.
+                            If you don't fine-tune, the "meaning" of words might not align with your domain.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
             {/* Performance Benchmarks */}
             <section className="space-y-6">
                 <h2 className="text-3xl font-bold">Performance Benchmarks</h2>
-                <p className="text-muted-foreground">Dataset: 10 million products, 768 dimensions</p>
+                <p className="text-foreground leading-relaxed">
+                    How fast is HNSW? Incredibly fast. Because search is logarithmic `O(log N)`, doubling the data size
+                    only adds a tiny constant amount of time. You can search billions of vectors in milliseconds.
+                </p>
+                <div className="bg-zinc-100 p-3 rounded-lg border border-zinc-200">
+                    <p className="text-sm text-zinc-600 font-mono"><strong>Benchmark Spec:</strong> 10M products, 768 dimensions (m=16, ef_c=100)</p>
+                </div>
 
                 <div className="overflow-x-auto rounded-xl border-2 border-border">
                     <table className="w-full text-sm">
@@ -395,7 +579,7 @@ export default function Vectors() {
                     <p className="text-sm text-blue-900 font-mono">
                         10M vectors: 4ms • 100M vectors: 8ms • 1B vectors: 15ms
                         <br />
-                        <span className="text-blue-700">(Logarithmic scaling — 10x data ≠ 10x latency)</span>
+                        <span className="text-blue-700">(Logarithmic scaling  10x data ≠ 10x latency)</span>
                     </p>
                 </div>
             </section>
@@ -408,7 +592,7 @@ export default function Vectors() {
                 <ul className="space-y-2 text-sm text-green-900">
                     <li className="flex items-start gap-2">
                         <Network className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Vectors encode meaning</strong> — similar text produces nearby vectors in high-dimensional space.</span>
+                        <span><strong>Vectors encode meaning</strong>  similar text produces nearby vectors in high-dimensional space.</span>
                     </li>
                     <li className="flex items-start gap-2">
                         <Layers className="w-4 h-4 shrink-0 mt-0.5" />
@@ -420,7 +604,7 @@ export default function Vectors() {
                     </li>
                     <li className="flex items-start gap-2">
                         <Zap className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Hybrid search is usually best</strong> — combine BM25 + vectors for best results.</span>
+                        <span><strong>Hybrid search is usually best</strong>  combine BM25 + vectors for best results.</span>
                     </li>
                     <li className="flex items-start gap-2">
                         <Cpu className="w-4 h-4 shrink-0 mt-0.5" />

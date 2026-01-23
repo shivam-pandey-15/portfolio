@@ -20,10 +20,11 @@ export default function Paths() {
                     <Database className="w-8 h-8" />
                     The Write Path (Indexing)
                 </h2>
+
                 <p className="text-foreground leading-relaxed">
-                    When you index a document, it passes through several stages before it's both durable (won't be lost)
-                    and searchable (can be found by queries). Understanding this path helps you tune performance and
-                    diagnose why freshly indexed documents might not appear immediately in search results.
+                    When you call `PUT /products/_doc/1`, what happens behind the scenes? The goal is durability (don't lose data)
+                    and eventual searchability. Notice the distinction: data is **durable** almost instantly (thanks to the Transaction Log),
+                    but **searchable** only after a refresh (a few seconds). This dual-track system balances data safety with performance.
                 </p>
 
                 <div className="bg-zinc-900 rounded-xl p-8">
@@ -127,9 +128,7 @@ export default function Paths() {
                     The Query Path (Searching)
                 </h2>
                 <p className="text-foreground leading-relaxed">
-                    A search query executes in two phases. The first phase (Query) runs on every shard and finds the
-                    best matching document IDs. The second phase (Fetch) retrieves the full content only for the
-                    documents that will actually be returned. This two-phase approach minimizes network transfer.
+                    Why is distributed search complex? Because of the **Scatter-Gather** problem. A search request must first be sent to *every single shard* (Scatter). Each shard executes the query locally. Then, the results—often just IDs and scores—are sent back to the coordinator (Gather). Finally, the coordinator requests the full JSON content only for the 'winning' documents. This two-phase Fetch-then-Fill approach minimizes network traffic.
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-6">
@@ -169,9 +168,7 @@ export default function Paths() {
                     <Clock className="w-8 h-8" /> Latency Breakdown
                 </h2>
                 <p className="text-foreground leading-relaxed">
-                    Where does the time actually go? This breakdown shows a typical search request. The Query phase
-                    (scoring documents) dominates—this is why adding filters that reduce the candidate set is the
-                    most effective way to speed up queries.
+                    In a typical search request, the vast majority of time is spent in the **Query Phase**—specifically, scoring documents. If your query matches 10 million documents, the engine must calculate a relevance score for every single one. This is why **Filters** are so powerful: they cheaply reduce the number of documents that need to be scored, dramatically reducing latency.
                 </p>
 
                 <div className="rounded-xl border-2 border-border overflow-hidden">
@@ -228,7 +225,7 @@ export default function Paths() {
                         </div>
                     </div>
                     <div className="mt-4 text-xs text-zinc-400 text-center">
-                        All caches invalidate on refresh — tune refresh_interval for your workload.
+                        All caches invalidate on refresh  tune refresh_interval for your workload.
                     </div>
                 </div>
             </section>
@@ -237,9 +234,7 @@ export default function Paths() {
             <section className="space-y-6">
                 <h2 className="text-3xl font-bold">Optimistic Concurrency Control</h2>
                 <p className="text-foreground leading-relaxed">
-                    When multiple processes update the same document concurrently, you can lose updates. Elasticsearch
-                    uses optimistic concurrency control (OCC) to detect and prevent this. Here's how it works and
-                    how to use it correctly.
+                    How do you prevent data corruption when two users edit the same document? SQL databases use locks, which kill performance. Search engines use **Optimistic Concurrency Control (OCC)**. Every document has a `_seq_no` version. When you write, you say 'Update document ID 123 *only if* it is still version 5'. If someone else updated it to version 6, your write is rejected (409 Conflict), and you must retry. No locks, no waiting.
                 </p>
 
                 <div className="bg-amber-100 border-2 border-amber-500 p-5 rounded-xl">

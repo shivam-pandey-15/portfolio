@@ -43,7 +43,7 @@ export default function PowerLawsPage() {
 
                 <p className="text-muted-foreground">
                     This curve (Zipf's Law) represents one of the most fundamental truths in search.
-                    The "Head" (red) represents safe, frequent queries. The "Tail" (green) is where the complexity—and often the high-value intent—lives.
+                    The "Head" (red) represents safe, frequent queries. The "Tail" (green) is where the complexityand often the high-value intentlives.
                 </p>
 
                 <div className="border border-border rounded-xl p-6">

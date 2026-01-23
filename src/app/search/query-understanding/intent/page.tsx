@@ -19,7 +19,7 @@ export default function IntentPage() {
                 <p className="text-sm text-muted-foreground">Chapter 2.3</p>
                 <h1 className="text-4xl font-bold tracking-tight">Intent vs Tokens</h1>
                 <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
-                    Tokens are what the user typed. Intent is what they meant. These often diverge — and understanding this gap is fundamental to building good search.
+                    Tokens are what the user typed. Intent is what they meant. These often diverge  and understanding this gap is fundamental to building good search.
                 </p>
             </div>
 
@@ -37,7 +37,7 @@ export default function IntentPage() {
                         This sounds reasonable until you realize that <strong>users express intent through words, but intent and words are not the same thing</strong>.
                     </p>
                     <p>
-                        When a user types <code>"cheap laptop"</code>, they don't want documents containing the word "cheap" —
+                        When a user types <code>"cheap laptop"</code>, they don't want documents containing the word "cheap"
                         they want laptops under a certain price. When they type <code>"laptop without touchscreen"</code>,
                         matching "touchscreen" actually gives them the opposite of what they want.
                     </p>
@@ -352,11 +352,11 @@ export default function IntentPage() {
             <section className="bg-primary/5 p-6 rounded-xl border border-primary/20">
                 <h2 className="text-lg font-semibold mb-4">Key Takeaways</h2>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li>• <strong>Tokens ≠ Intent</strong> — the literal words typed are just a hint at what users want</li>
-                    <li>• <strong>Synonyms are table stakes</strong> — you must handle "couch" vs "sofa", "sneakers" vs "athletic shoes"</li>
-                    <li>• <strong>Negation is hard</strong> — "without X" often incorrectly returns results containing X</li>
-                    <li>• <strong>Intent modifiers need special handling</strong> — "cheap", "best", "comfortable" are constraints, not keywords</li>
-                    <li>• <strong>Hybrid approaches win</strong> — tokens for precision, semantics for recall</li>
+                    <li>• <strong>Tokens ≠ Intent</strong>  the literal words typed are just a hint at what users want</li>
+                    <li>• <strong>Synonyms are table stakes</strong>  you must handle "couch" vs "sofa", "sneakers" vs "athletic shoes"</li>
+                    <li>• <strong>Negation is hard</strong>  "without X" often incorrectly returns results containing X</li>
+                    <li>• <strong>Intent modifiers need special handling</strong>  "cheap", "best", "comfortable" are constraints, not keywords</li>
+                    <li>• <strong>Hybrid approaches win</strong>  tokens for precision, semantics for recall</li>
                 </ul>
             </section>
 

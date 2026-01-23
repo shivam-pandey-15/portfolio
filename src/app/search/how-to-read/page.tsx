@@ -10,7 +10,7 @@ export default function HowToRead() {
                 <h1 className="text-4xl md:text-5xl font-bold tracking-tight">How to Read This Guide</h1>
                 <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
                     A structured journey from business problems to distributed systems engineering.
-                    This isn't a blog or a textbook — it's your roadmap to becoming a search systems expert.
+                    This isn't a blog or a textbook  it's your roadmap to becoming a search systems expert.
                 </p>
                 <div className="flex flex-wrap gap-4 pt-4">
                     <Link href="/search/how-to-read/audience" className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
@@ -49,7 +49,7 @@ export default function HowToRead() {
                             <CheckCircle2 className="w-5 h-5 text-green-500" />
                             <h3 className="font-semibold group-hover:text-primary">0.3 What "Good Search" Means</h3>
                         </div>
-                        <p className="text-sm text-muted-foreground">Relevance, speed, and discovery — the three pillars of search quality.</p>
+                        <p className="text-sm text-muted-foreground">Relevance, speed, and discovery  the three pillars of search quality.</p>
                     </Link>
 
                     <Link href="/search/how-to-read/business-lever" className="group border border-border rounded-xl p-6 hover:border-primary/50 hover:bg-primary/5 transition-all">
@@ -88,10 +88,10 @@ export default function HowToRead() {
                     <div className="border border-border rounded-xl p-6">
                         <h3 className="font-bold text-lg mb-4">Part I: Foundations (Chapters 0-3)</h3>
                         <div className="grid gap-3 md:grid-cols-2">
-                            <div className="text-sm"><span className="font-medium">0. How to Read This</span> — Philosophy, audience, curriculum</div>
-                            <div className="text-sm"><span className="font-medium">1. Business & Product</span> — Why search matters, metrics, funnels</div>
-                            <div className="text-sm"><span className="font-medium">2. Query Understanding</span> — Intent, tokenization, power laws</div>
-                            <div className="text-sm"><span className="font-medium">3. Indexing & Infra</span> — Inverted index, BKD trees, HNSW</div>
+                            <div className="text-sm"><span className="font-medium">0. How to Read This</span>  Philosophy, audience, curriculum</div>
+                            <div className="text-sm"><span className="font-medium">1. Business & Product</span>  Why search matters, metrics, funnels</div>
+                            <div className="text-sm"><span className="font-medium">2. Query Understanding</span>  Intent, tokenization, power laws</div>
+                            <div className="text-sm"><span className="font-medium">3. Indexing & Infra</span>  Inverted index, BKD trees, HNSW</div>
                         </div>
                     </div>
 
@@ -99,10 +99,10 @@ export default function HowToRead() {
                     <div className="border border-border rounded-xl p-6">
                         <h3 className="font-bold text-lg mb-4">Part II: The Search Pipeline (Chapters 4-7)</h3>
                         <div className="grid gap-3 md:grid-cols-2">
-                            <div className="text-sm"><span className="font-medium">4. Data Foundation</span> — Modeling, cleaning, quality</div>
-                            <div className="text-sm"><span className="font-medium">5. Retrieval</span> — BM25, filters, WAND, hybrid</div>
-                            <div className="text-sm"><span className="font-medium">6. Vector Search</span> — Embeddings, HNSW, semantic</div>
-                            <div className="text-sm"><span className="font-medium">7. Training Embeddings</span> — Contrastive learning, fine-tuning</div>
+                            <div className="text-sm"><span className="font-medium">4. Data Foundation</span>  Modeling, cleaning, quality</div>
+                            <div className="text-sm"><span className="font-medium">5. Retrieval</span>  BM25, filters, WAND, hybrid</div>
+                            <div className="text-sm"><span className="font-medium">6. Vector Search</span>  Embeddings, HNSW, semantic</div>
+                            <div className="text-sm"><span className="font-medium">7. Training Embeddings</span>  Contrastive learning, fine-tuning</div>
                         </div>
                     </div>
 
@@ -110,9 +110,9 @@ export default function HowToRead() {
                     <div className="border border-border rounded-xl p-6">
                         <h3 className="font-bold text-lg mb-4">Part III: Ranking & Presentation (Chapters 8-10)</h3>
                         <div className="grid gap-3 md:grid-cols-2">
-                            <div className="text-sm"><span className="font-medium">8. Ranking</span> — LTR, features, multi-stage</div>
-                            <div className="text-sm"><span className="font-medium">9. UI Layout</span> — Visual hierarchy, snippets, mobile</div>
-                            <div className="text-sm"><span className="font-medium">10. Ads in Search</span> — Sponsored results, monetization</div>
+                            <div className="text-sm"><span className="font-medium">8. Ranking</span>  LTR, features, multi-stage</div>
+                            <div className="text-sm"><span className="font-medium">9. UI Layout</span>  Visual hierarchy, snippets, mobile</div>
+                            <div className="text-sm"><span className="font-medium">10. Ads in Search</span>  Sponsored results, monetization</div>
                         </div>
                     </div>
 
@@ -120,10 +120,10 @@ export default function HowToRead() {
                     <div className="border border-border rounded-xl p-6">
                         <h3 className="font-bold text-lg mb-4">Part IV: Performance & Scale (Chapters 11-14)</h3>
                         <div className="grid gap-3 md:grid-cols-2">
-                            <div className="text-sm"><span className="font-medium">11. Personalization</span> — User profiles, session intent</div>
-                            <div className="text-sm"><span className="font-medium">12. Caching</span> — Types, invalidation, P99</div>
-                            <div className="text-sm"><span className="font-medium">13. System Architecture</span> — Query path, indexing path, API design</div>
-                            <div className="text-sm"><span className="font-medium">14. Distributed Systems</span> — Sharding, replication, consistency</div>
+                            <div className="text-sm"><span className="font-medium">11. Personalization</span>  User profiles, session intent</div>
+                            <div className="text-sm"><span className="font-medium">12. Caching</span>  Types, invalidation, P99</div>
+                            <div className="text-sm"><span className="font-medium">13. System Architecture</span>  Query path, indexing path, API design</div>
+                            <div className="text-sm"><span className="font-medium">14. Distributed Systems</span>  Sharding, replication, consistency</div>
                         </div>
                     </div>
 
@@ -131,9 +131,9 @@ export default function HowToRead() {
                     <div className="border border-border rounded-xl p-6">
                         <h3 className="font-bold text-lg mb-4">Part V: Operations (Chapters 15-17)</h3>
                         <div className="grid gap-3 md:grid-cols-2">
-                            <div className="text-sm"><span className="font-medium">15. Evaluation</span> — NDCG, A/B testing, guardrails</div>
-                            <div className="text-sm"><span className="font-medium">16. Analytics</span> — Logging, zero results, improvement loops</div>
-                            <div className="text-sm"><span className="font-medium">17. LLMs in Search</span> — RAG, agents, limitations</div>
+                            <div className="text-sm"><span className="font-medium">15. Evaluation</span>  NDCG, A/B testing, guardrails</div>
+                            <div className="text-sm"><span className="font-medium">16. Analytics</span>  Logging, zero results, improvement loops</div>
+                            <div className="text-sm"><span className="font-medium">17. LLMs in Search</span>  RAG, agents, limitations</div>
                         </div>
                     </div>
 
@@ -141,10 +141,10 @@ export default function HowToRead() {
                     <div className="border border-border rounded-xl p-6">
                         <h3 className="font-bold text-lg mb-4">Parts VI-VIII: Hands-On & Career (Chapters 18-24)</h3>
                         <div className="grid gap-3 md:grid-cols-2">
-                            <div className="text-sm"><span className="font-medium">18. Build from Scratch</span> — Code your own search engine</div>
-                            <div className="text-sm"><span className="font-medium">19. Case Studies</span> — Amazon, Google, GitHub, Netflix</div>
-                            <div className="text-sm"><span className="font-medium">20. Failure Modes</span> — What breaks and why</div>
-                            <div className="text-sm"><span className="font-medium">21-24. Meta</span> — Org structure, mindset, appendix</div>
+                            <div className="text-sm"><span className="font-medium">18. Build from Scratch</span>  Code your own search engine</div>
+                            <div className="text-sm"><span className="font-medium">19. Case Studies</span>  Amazon, Google, GitHub, Netflix</div>
+                            <div className="text-sm"><span className="font-medium">20. Failure Modes</span>  What breaks and why</div>
+                            <div className="text-sm"><span className="font-medium">21-24. Meta</span>  Org structure, mindset, appendix</div>
                         </div>
                     </div>
                 </div>

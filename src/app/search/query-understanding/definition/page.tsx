@@ -552,7 +552,7 @@ export default function DefinitionPage() {
                     </li>
                     <li className="flex items-start gap-2">
                         <span className="text-primary font-bold">3.</span>
-                        <span><strong>Most queries are ambiguous</strong> — the system must handle this</span>
+                        <span><strong>Most queries are ambiguous</strong>  the system must handle this</span>
                     </li>
                     <li className="flex items-start gap-2">
                         <span className="text-primary font-bold">4.</span>

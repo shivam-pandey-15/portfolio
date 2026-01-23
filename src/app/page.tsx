@@ -24,7 +24,7 @@ export default function Home() {
         </h2>
         <p className="text-xl text-muted-foreground leading-relaxed">
           A high-quality systems exploration site. Dive into the architecture of search, recommendation engines, and massive-scale infrastructure.
-          Not a blog—a guided tour through the machine.
+          Not a bloga guided tour through the machine.
         </p>
       </section>
 

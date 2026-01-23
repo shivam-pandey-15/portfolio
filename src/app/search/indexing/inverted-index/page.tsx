@@ -38,7 +38,7 @@ export default function InvertedIndex() {
                         </div>
                         <div className="mt-4 text-sm text-red-800 border-t border-red-200 pt-3">
                             To find "brown": Scan Doc 1, then Doc 2, then Doc 3...
-                            <div className="font-bold text-red-900 mt-1">O(N) — Linear scan of all documents</div>
+                            <div className="font-bold text-red-900 mt-1">O(N)  Linear scan of all documents</div>
                         </div>
                     </div>
 
@@ -55,20 +55,15 @@ export default function InvertedIndex() {
                         </div>
                         <div className="mt-4 text-sm text-green-800 border-t border-green-200 pt-3">
                             To find "brown": Direct lookup in dictionary.
-                            <div className="font-bold text-green-900 mt-1">O(1) — Instant lookup regardless of corpus size</div>
+                            <div className="font-bold text-green-900 mt-1">O(1)  Instant lookup regardless of corpus size</div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </section >
 
             {/* The Core Components */}
-            <section className="space-y-8">
+            < section className="space-y-8" >
                 <h2 className="text-3xl font-bold">Anatomy of an Inverted Index</h2>
-                <p className="text-foreground leading-relaxed">
-                    An inverted index has two main parts: a **term dictionary** that maps words to their posting lists,
-                    and the **posting lists** themselves which contain the document IDs. Both use clever compression to
-                    fit billions of entries in memory.
-                </p>
 
                 {/* Term Dictionary */}
                 <div className="space-y-4">
@@ -78,7 +73,7 @@ export default function InvertedIndex() {
                     </h3>
                     <p className="text-foreground">
                         The term dictionary is a sorted index of every unique word. It uses a
-                        <strong> Finite State Transducer (FST)</strong> — a compressed prefix tree that shares common prefixes and suffixes.
+                        <strong> Finite State Transducer (FST)</strong>  a compressed prefix tree that shares common prefixes and suffixes.
                     </p>
 
                     <div className="bg-zinc-900 rounded-xl p-6">
@@ -152,10 +147,10 @@ export default function InvertedIndex() {
                         </p>
                     </div>
                 </div>
-            </section>
+            </section >
 
             {/* Query Execution Step by Step */}
-            <section className="space-y-8">
+            < section className="space-y-8" >
                 <h2 className="text-3xl font-bold">How a Query Executes</h2>
                 <p className="text-foreground">
                     Let's trace exactly what happens when you search for <code className="bg-muted px-2 py-0.5 rounded text-foreground">"wireless keyboard"</code>
@@ -237,11 +232,6 @@ export default function InvertedIndex() {
             {/* Boolean Operations */}
             <section className="space-y-6">
                 <h2 className="text-3xl font-bold">Boolean Operations on Posting Lists</h2>
-                <p className="text-foreground leading-relaxed">
-                    Boolean queries combine posting lists using set operations. AND requires a document to be in
-                    both lists, OR requires it to be in either, and NOT excludes documents from the result.
-                    These operations run efficiently because posting lists are sorted.
-                </p>
 
                 <div className="grid md:grid-cols-3 gap-4">
                     <div className="rounded-xl border-2 border-border p-4 bg-white">
@@ -276,7 +266,7 @@ export default function InvertedIndex() {
                 <h2 className="text-3xl font-bold">The Analysis Pipeline</h2>
                 <p className="text-foreground">
                     Before text enters the inverted index, it passes through an analysis pipeline.
-                    <strong> The same analysis must happen at both index time and query time</strong> — otherwise queries won't match!
+                    <strong> The same analysis must happen at both index time and query time</strong>  otherwise queries won't match!
                 </p>
 
                 <div className="bg-zinc-900 rounded-xl p-6">
@@ -309,6 +299,28 @@ export default function InvertedIndex() {
                         </div>
                     </div>
                 </div>
+            </section>
+
+            {/* How Indexing is Built */}
+            <section className="space-y-6">
+                <h2 className="text-3xl font-bold">How the Index is Built (Segments)</h2>
+                <div className="bg-amber-100 border-l-4 border-amber-500 p-4">
+                    <p className="font-bold text-amber-900 leading-tight">
+                        The index is NOT a single updated file. It is a collection of immutable <strong>Segments</strong>.
+                    </p>
+                </div>
+                <p className="text-foreground leading-relaxed">
+                    You cannot efficiently insert a new document ID into the middle of a sorted compressed posting list on disk.
+                    Instead, search engines use an <strong>LSM-Tree (Log Structured Merge)</strong> approach:
+                </p>
+                <ul className="list-decimal pl-6 space-y-2 text-foreground">
+                    <li><strong>Buffer:</strong> New documents go into an in-memory buffer.</li>
+                    <li><strong>Flush:</strong> When full, the buffer is written as a new mini-segment (Analysis happens here).</li>
+                    <li><strong>Merge:</strong> Background threads pick small segments and merge them into larger ones, deleting "tombstones" (deleted docs).</li>
+                </ul>
+                <p className="text-sm text-muted-foreground">
+                    This explains why "Refresh" (making new segment visible) and "Commit" (fsync to disk) are different operations.
+                </p>
             </section>
 
             {/* Common Pitfalls */}
@@ -389,6 +401,37 @@ export default function InvertedIndex() {
                                 <div className="text-xs text-zinc-500">(0.68x raw text)</div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* When NOT to use */}
+            <section className="space-y-6">
+                <h2 className="text-3xl font-bold text-red-700">When NOT to use an Inverted Index</h2>
+                <div className="grid md:grid-cols-3 gap-4">
+                    <div className="border border-red-200 bg-red-50 p-4 rounded-xl">
+                        <h4 className="font-bold text-red-900 mb-2">Numeric Ranges</h4>
+                        <p className="text-sm text-red-800">
+                            Query: <code className="bg-red-100 px-1 rounded">price &gt; 100</code><br />
+                            Inverted indexes must verify every unique word &gt; 100.
+                            <br /><strong>Use: BKD Trees</strong>
+                        </p>
+                    </div>
+                    <div className="border border-red-200 bg-red-50 p-4 rounded-xl">
+                        <h4 className="font-bold text-red-900 mb-2">Semantic Similarity</h4>
+                        <p className="text-sm text-red-800">
+                            Query: "Similar to 'King'"<br />
+                            Inverted index only finds exact character matches ("Kingdom").
+                            <br /><strong>Use: Vectors</strong>
+                        </p>
+                    </div>
+                    <div className="border border-red-200 bg-red-50 p-4 rounded-xl">
+                        <h4 className="font-bold text-red-900 mb-2">Sorting / Aggregations</h4>
+                        <p className="text-sm text-red-800">
+                            "Group by Category"<br />
+                            Uninverting (Doc-&gt;Term) is slow.
+                            <br /><strong>Use: DocValues</strong>
+                        </p>
                     </div>
                 </div>
             </section>

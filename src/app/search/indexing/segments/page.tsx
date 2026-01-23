@@ -19,9 +19,10 @@ export default function Segments() {
             <section className="space-y-8">
                 <h2 className="text-3xl font-bold">Why Immutability?</h2>
                 <p className="text-foreground leading-relaxed">
-                    Traditional databases modify data in place—overwriting the old value with the new. This seems efficient,
-                    but it creates problems: you need locks to prevent readers from seeing half-written data, and a crash
-                    during a write can corrupt the entire record. Lucene takes a different approach.
+                    Most databases update data "in-place", overwriting the old record with the new one. While intuitive, this approach is full of dangers:
+                    concurrency issues require complex locking, and a system crash during a write can leave the database corrupted.
+                    Lucene (and Elasticsearch) takes a radically different approach: **Segments are immutable**. Once a file is written to disk,
+                    it is never changed. "Updating" a document actually means writing a new version to a *new* segment and marking the old one as deleted.
                 </p>
                 <div className="grid md:grid-cols-2 gap-8">
                     <div className="rounded-xl border-2 border-zinc-300 bg-zinc-50 p-6">
@@ -64,9 +65,10 @@ export default function Segments() {
             <section className="space-y-8">
                 <h2 className="text-3xl font-bold">The Segment Lifecycle</h2>
                 <p className="text-foreground leading-relaxed">
-                    When you index a document, it doesn't immediately become searchable. Instead, it passes through
-                    several stages—from the in-memory buffer to a searchable segment and eventually through background
-                    merges. Understanding this lifecycle helps you tune refresh intervals and diagnose latency issues.
+                    How does a raw JSON document become a searchable immutable segment? It's a journey through memory and disk.
+                    First, documents land in an **In-Memory Buffer** (RAM). Every second (by default), a process called **Refresh** turns
+                    this buffer into a new small segment on disk. At this moment—and only at this moment—the document becomes visible to search.
+                    This "refresh" mechanism is why Elasticsearch is called "Near Real-Time" (NRT).
                 </p>
                 <div className="bg-zinc-900 rounded-xl p-8">
                     <div className="flex flex-col items-center gap-4 max-w-lg mx-auto">
@@ -153,9 +155,10 @@ export default function Segments() {
             <section className="space-y-6">
                 <h2 className="text-3xl font-bold">The Segment Explosion Problem</h2>
                 <p className="text-foreground leading-relaxed">
-                    With the default 1-second refresh interval, you create 86,400 segments per day. If merges can't
-                    keep up with this rate, you end up with thousands of tiny segments that each query must check.
-                    This is called "segment explosion" and it can bring your cluster to its knees.
+                    If we create a new segment every second, after an hour we'll have 3,600 files. After a day, 86,400.
+                    Since every search query has to check *every* segment, performance degrades linearly with the number of segments.
+                    To solve this, Lucene runs **Background Merges**. It constantly picks small segments and merges them into
+                    larger ones (like 2048 game tiles), effectively ensuring the number of segments stays manageable.
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-6">
@@ -188,7 +191,7 @@ export default function Segments() {
                 <h2 className="text-3xl font-bold">Write Amplification: The Hidden Cost</h2>
                 <p className="text-foreground leading-relaxed">
                     Immutability has a hidden cost: write amplification. Because segments are never modified in place,
-                    the same data gets rewritten multiple times as it moves through the system—first to the translog,
+                    the same data gets rewritten multiple times as it moves through the systemfirst to the translog,
                     then to a segment, then through multiple merge phases.
                 </p>
 
@@ -226,19 +229,19 @@ export default function Segments() {
                 <ul className="space-y-2 text-sm text-green-900">
                     <li className="flex items-start gap-2">
                         <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Segments are immutable</strong> — lock-free reads, perfect caching, crash recovery.</span>
+                        <span><strong>Segments are immutable</strong>  lock-free reads, perfect caching, crash recovery.</span>
                     </li>
                     <li className="flex items-start gap-2">
                         <RefreshCw className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Refresh creates segments</strong> — data searchable within ~1s. Tune for your workload.</span>
+                        <span><strong>Refresh creates segments</strong>  data searchable within ~1s. Tune for your workload.</span>
                     </li>
                     <li className="flex items-start gap-2">
                         <Merge className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Merge reclaims space</strong> — force-merge only for read-only indices.</span>
+                        <span><strong>Merge reclaims space</strong>  force-merge only for read-only indices.</span>
                     </li>
                     <li className="flex items-start gap-2">
                         <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Write amplification is 5-7x</strong> — plan disk capacity accordingly.</span>
+                        <span><strong>Write amplification is 5-7x</strong>  plan disk capacity accordingly.</span>
                     </li>
                 </ul>
             </section>

@@ -19,9 +19,10 @@ export default function Sharding() {
             <section className="space-y-8">
                 <h2 className="text-3xl font-bold">Why Shard?</h2>
                 <p className="text-foreground leading-relaxed">
-                    A single machine has fixed limits—CPU cores, RAM, disk space. When your data or traffic grows beyond
-                    what one server can handle, you have two choices: get a bigger machine (vertical scaling) or add more
-                    machines (horizontal scaling). Sharding is how search engines implement horizontal scaling.
+                    A single machine has hard physical limits: RAM is finite, CPU cores are limited, and disks fill up.
+                    When your data exceeds these limits (e.g., 5TB index on a 1TB machine) or your query volume is too high for one CPU to handle,
+                    you must scale horizontally. Sharding breaks your single index into smaller, manageable chunks called **shards**,
+                    which can be distributed across multiple servers. This allows you to grow indefinitely by simply adding more nodes.
                 </p>
                 <div className="grid md:grid-cols-2 gap-8">
                     <div className="rounded-xl border-2 border-zinc-300 bg-zinc-50 p-6">
@@ -64,8 +65,10 @@ export default function Sharding() {
                     Routing: How Documents Find Their Home
                 </h2>
                 <p className="text-foreground leading-relaxed">
-                    When you index a document, how does the system decide which shard to put it in? The answer is a simple
-                    hash function. This ensures documents are evenly distributed and that lookups only need to check one shard.
+                    If an index is split into 5 pieces, where does document #123 go? The system uses a deterministic formula called **Consistent Hashing**:
+                    `shard = hash(id) % number_of_shards`. This ensures a uniform distribution of documents across all shards without needing a central lookup table.
+                    However, this simple math explains why **you cannot change the number of shards** after creating an index—doing so would change the modulo result,
+                    making existing documents unfindable.
                 </p>
 
                 <div className="bg-zinc-900 rounded-xl p-6">
@@ -110,9 +113,10 @@ export default function Sharding() {
             <section className="space-y-8">
                 <h2 className="text-3xl font-bold">Query Execution: Scatter-Gather</h2>
                 <p className="text-foreground leading-relaxed">
-                    When you search a sharded index, your query has to check all shards—data could be anywhere. This is called
-                    the "scatter-gather" pattern: scatter the query to all shards, then gather and merge the results. It happens
-                    in two phases to minimize network traffic.
+                    How do you search across 50 shards? You don't. You send your query to a **Coordinator Node**, which acts as a project manager.
+                    The coordinator broadcasts ("scatters") the query to every shard. Each shard executes the search locally on its slice of data
+                    and returns its top results. The coordinator then collects ("gathers") these partial results, merges them into a global top-list,
+                    and returns the final answer. This parallelism makes sharded search incredibly fast, but network overhead increases with shard count.
                 </p>
 
                 <div className="bg-zinc-900 rounded-xl p-8">
@@ -154,11 +158,12 @@ export default function Sharding() {
 
             {/* Deep Pagination Warning */}
             <section className="space-y-6">
-                <h2 className="text-3xl font-bold">Deep Pagination Problem</h2>
+                <h2 className="text-3xl font-bold">The Deep Pagination Problem</h2>
                 <p className="text-foreground leading-relaxed">
-                    The scatter-gather pattern has a hidden cost: deep pagination. To show page 1000 with 10 results per page,
-                    you need to know the globally-ranked positions 10,001 through 10,010. That means each shard must return
-                    10,010 candidates, which the coordinator then merges. This doesn't scale.
+                    The scatter-gather model has a major weakness: requesting "page 1,000" is expensive.
+                    To return results 10,000 to 10,010, **every single shard** must return its own top 10,010 results to the coordinator.
+                    If you have 10 shards, the coordinator must sort 100,100 documents in memory just to return 10.
+                    This exponential cost is why most search engines limit `max_result_window` to 10,000. For deep pagination, use `search_after` instead.
                 </p>
 
                 <div className="bg-red-100 border-2 border-red-500 p-5 rounded-xl">
@@ -190,9 +195,10 @@ export default function Sharding() {
             <section className="space-y-6">
                 <h2 className="text-3xl font-bold">Shard Sizing Guide</h2>
                 <p className="text-foreground leading-relaxed">
-                    There's a sweet spot for shard size. Too small, and you pay overhead for each shard (memory, file handles,
-                    coordination). Too large, and operations like recovery and rebalancing take too long. The general guidance
-                    is 20-50 GB per shard.
+                    Shard size is the Goldilocks problem of search scaling.
+                    **Too small (&lt;10GB)**: You waste heap memory on overhead. A cluster with thousands of tiny shards becomes unstable.
+                    **Too large (&gt;50GB)**: Recovery takes hours. Moving a 100GB shard across the network saturates bandwidth.
+                    **Just right (20-50GB)**: The industry standard sweet spot. It balances cluster stability with recovery speed.
                 </p>
 
                 <div className="overflow-x-auto rounded-xl border-2 border-border">
@@ -276,7 +282,7 @@ export default function Sharding() {
                     </li>
                     <li className="flex items-start gap-2">
                         <Hash className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>hash(id) % shards</strong> — deterministic routing. Custom routing for multi-tenant.</span>
+                        <span><strong>hash(id) % shards</strong>  deterministic routing. Custom routing for multi-tenant.</span>
                     </li>
                     <li className="flex items-start gap-2">
                         <Network className="w-4 h-4 shrink-0 mt-0.5" />
@@ -284,11 +290,11 @@ export default function Sharding() {
                     </li>
                     <li className="flex items-start gap-2">
                         <Server className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Target 20-50 GB per shard</strong>. Shard count is fixed—plan carefully!</span>
+                        <span><strong>Target 20-50 GB per shard</strong>. Shard count is fixedplan carefully!</span>
                     </li>
                     <li className="flex items-start gap-2">
                         <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Deep pagination is dangerous</strong> — use search_after instead.</span>
+                        <span><strong>Deep pagination is dangerous</strong>  use search_after instead.</span>
                     </li>
                 </ul>
             </section>

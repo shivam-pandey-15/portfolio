@@ -21,7 +21,7 @@ export default function PipelinePage() {
                 <p className="text-sm text-muted-foreground">Chapter 2.5</p>
                 <h1 className="text-4xl font-bold tracking-tight">The Query Understanding Pipeline</h1>
                 <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
-                    Query understanding is not one step — it's a pipeline of transformations that must complete in &lt;50ms.
+                    Query understanding is not one step  it's a pipeline of transformations that must complete in &lt;50ms.
                 </p>
             </div>
 
@@ -400,7 +400,7 @@ export default function PipelinePage() {
                     <li>• <strong>Total latency budget: ~50ms</strong> (P50: 35ms)</li>
                     <li>• <strong>Spell correction + NER are most expensive</strong></li>
                     <li>• <strong>Parallelize where possible</strong> (NER + Intent)</li>
-                    <li>• <strong>Cache aggressively</strong> — head queries should hit cache</li>
+                    <li>• <strong>Cache aggressively</strong>  head queries should hit cache</li>
                 </ul>
             </section>
 

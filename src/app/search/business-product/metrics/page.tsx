@@ -251,7 +251,7 @@ export default function MetricsPage() {
                         <h3 className="font-bold mb-2">Position Bias</h3>
                         <p className="text-sm text-muted-foreground mb-3">Higher results get more clicks regardless of relevance.</p>
                         <div className="text-xs bg-background p-3 rounded-lg">
-                            <strong>Example:</strong> High CTR on #1 doesn't mean #1 is best — users just click top results
+                            <strong>Example:</strong> High CTR on #1 doesn't mean #1 is best  users just click top results
                         </div>
                     </div>
                 </div>
@@ -326,10 +326,10 @@ export default function MetricsPage() {
                 <h2 className="text-lg font-semibold mb-4">Key Takeaways</h2>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                     <li>• <strong>Offline metrics</strong> (NDCG, Precision) for development; <strong>Online metrics</strong> (CTR, ZRR) for production</li>
-                    <li>• <strong>Zero Result Rate is the first metric to fix</strong> — direct revenue loss</li>
-                    <li>• <strong>CTR can be misleading</strong> — high CTR + low conversion = clickbait</li>
-                    <li>• <strong>Use multiple metrics together</strong> — no single metric tells the whole story</li>
-                    <li>• <strong>Set alerts for anomalies</strong> — catch regressions early</li>
+                    <li>• <strong>Zero Result Rate is the first metric to fix</strong>  direct revenue loss</li>
+                    <li>• <strong>CTR can be misleading</strong>  high CTR + low conversion = clickbait</li>
+                    <li>• <strong>Use multiple metrics together</strong>  no single metric tells the whole story</li>
+                    <li>• <strong>Set alerts for anomalies</strong>  catch regressions early</li>
                 </ul>
             </section>
 

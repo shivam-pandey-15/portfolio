@@ -26,7 +26,7 @@ export default function FunnelPage() {
                             <Search className="w-4 h-4" />
                             <span className="font-bold">Query</span>
                         </div>
-                        <p className="text-xs text-muted-foreground">100% — User types something</p>
+                        <p className="text-xs text-muted-foreground">100%  User types something</p>
                     </div>
                     <ArrowDown className="w-4 h-4 mx-auto text-muted-foreground" />
 
@@ -36,7 +36,7 @@ export default function FunnelPage() {
                             <Database className="w-4 h-4" />
                             <span className="font-bold">Retrieval</span>
                         </div>
-                        <p className="text-xs text-muted-foreground">95% — 5% zero results</p>
+                        <p className="text-xs text-muted-foreground">95%  5% zero results</p>
                     </div>
                     <ArrowDown className="w-4 h-4 mx-auto text-muted-foreground" />
 
@@ -46,7 +46,7 @@ export default function FunnelPage() {
                             <BarChart2 className="w-4 h-4" />
                             <span className="font-bold">Ranking</span>
                         </div>
-                        <p className="text-xs text-muted-foreground">90% — 5% irrelevant in top 10</p>
+                        <p className="text-xs text-muted-foreground">90%  5% irrelevant in top 10</p>
                     </div>
                     <ArrowDown className="w-4 h-4 mx-auto text-muted-foreground" />
 
@@ -56,7 +56,7 @@ export default function FunnelPage() {
                             <Layout className="w-4 h-4" />
                             <span className="font-bold">Presentation</span>
                         </div>
-                        <p className="text-xs text-muted-foreground">85% — 5% bad UX/slow</p>
+                        <p className="text-xs text-muted-foreground">85%  5% bad UX/slow</p>
                     </div>
                     <ArrowDown className="w-4 h-4 mx-auto text-muted-foreground" />
 
@@ -66,7 +66,7 @@ export default function FunnelPage() {
                             <MousePointer className="w-4 h-4" />
                             <span className="font-bold">Click</span>
                         </div>
-                        <p className="text-xs text-muted-foreground">30% — 55% no click</p>
+                        <p className="text-xs text-muted-foreground">30%  55% no click</p>
                     </div>
                     <ArrowDown className="w-4 h-4 mx-auto text-muted-foreground" />
 
@@ -76,7 +76,7 @@ export default function FunnelPage() {
                             <Eye className="w-4 h-4" />
                             <span className="font-bold">Engagement</span>
                         </div>
-                        <p className="text-xs text-muted-foreground">20% — 10% bounce</p>
+                        <p className="text-xs text-muted-foreground">20%  10% bounce</p>
                     </div>
                     <ArrowDown className="w-4 h-4 mx-auto text-muted-foreground" />
 
@@ -86,7 +86,7 @@ export default function FunnelPage() {
                             <ShoppingCart className="w-4 h-4" />
                             <span className="font-bold">Conversion</span>
                         </div>
-                        <p className="text-xs text-muted-foreground">5% — Final purchase/action</p>
+                        <p className="text-xs text-muted-foreground">5%  Final purchase/action</p>
                     </div>
                 </div>
             </section>
@@ -223,7 +223,7 @@ export default function FunnelPage() {
                             <tr className="border-b border-border/50">
                                 <td className="py-2 px-3">Query</td>
                                 <td className="py年 2 px-3 text-right">100,000</td>
-                                <td className="py-2 px-3 text-right">—</td>
+                                <td className="py-2 px-3 text-right"></td>
                             </tr>
                             <tr className="border-b border-border/50">
                                 <td className="py-2 px-3">Retrieval</td>

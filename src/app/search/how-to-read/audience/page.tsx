@@ -198,19 +198,19 @@ export default function AudiencePage() {
                 <ul className="space-y-3 text-muted-foreground">
                     <li className="flex items-start gap-2">
                         <span className="text-red-500">✗</span>
-                        <span><strong>Complete beginners</strong> — You need basic programming skills first. Try freeCodeCamp or similar.</span>
+                        <span><strong>Complete beginners</strong>  You need basic programming skills first. Try freeCodeCamp or similar.</span>
                     </li>
                     <li className="flex items-start gap-2">
                         <span className="text-red-500">✗</span>
-                        <span><strong>Academic IR researchers</strong> — This is practical, not theoretical. We skip the math proofs.</span>
+                        <span><strong>Academic IR researchers</strong>  This is practical, not theoretical. We skip the math proofs.</span>
                     </li>
                     <li className="flex items-start gap-2">
                         <span className="text-red-500">✗</span>
-                        <span><strong>Copy-paste coders</strong> — You won't find "paste this YAML" tutorials here. We focus on understanding.</span>
+                        <span><strong>Copy-paste coders</strong>  You won't find "paste this YAML" tutorials here. We focus on understanding.</span>
                     </li>
                     <li className="flex items-start gap-2">
                         <span className="text-red-500">✗</span>
-                        <span><strong>People looking for quick fixes</strong> — Search is complex. This guide respects that complexity.</span>
+                        <span><strong>People looking for quick fixes</strong>  Search is complex. This guide respects that complexity.</span>
                     </li>
                 </ul>
             </section>

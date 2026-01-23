@@ -355,10 +355,10 @@ export default function RewritingPage() {
                 <h2 className="text-lg font-semibold mb-4">Key Takeaways</h2>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                     <li>• <strong>Expansion increases recall</strong> but can hurt precision</li>
-                    <li>• <strong>Rewriting converts to structured</strong> — better for filtering</li>
+                    <li>• <strong>Rewriting converts to structured</strong>  better for filtering</li>
                     <li>• <strong>Don't expand brands, constraints, negations</strong></li>
-                    <li>• <strong>Tiered approach</strong> — expand more as results decrease</li>
-                    <li>• <strong>Learn from clicks</strong> — best synonyms from user behavior</li>
+                    <li>• <strong>Tiered approach</strong>  expand more as results decrease</li>
+                    <li>• <strong>Learn from clicks</strong>  best synonyms from user behavior</li>
                 </ul>
             </section>
 

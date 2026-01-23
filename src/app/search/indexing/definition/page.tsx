@@ -16,11 +16,57 @@ export default function Definition() {
 
             <hr className="border-border" />
 
+            {/* Precise Definition */}
+            <section className="space-y-6">
+                <h2 className="text-3xl font-bold">What Exactly IS an Index?</h2>
+                <div className="bg-primary/5 border-2 border-primary p-6 rounded-xl">
+                    <p className="text-lg text-foreground font-medium leading-relaxed">
+                        An index in a search engine is a <strong>pre-computed data structure</strong> that maps terms to the documents that contain them,
+                        enabling distinct lookup and retrieval without scanning every document. It flips the relationship from
+                        "Document contains Terms" to "Term is in Documents".
+                    </p>
+                </div>
+            </section>
+
+            {/* Forward vs Inverted */}
+            <section className="space-y-8">
+                <h2 className="text-3xl font-bold">Forward vs. Inverted Index</h2>
+                <div className="grid md:grid-cols-2 gap-8">
+                    <div className="bg-zinc-50 p-6 rounded-xl border-2 border-zinc-200">
+                        <div className="text-xs font-bold text-zinc-500 uppercase mb-2">Forward Index</div>
+                        <div className="text-xl font-bold text-zinc-900 mb-4">Document → Terms</div>
+                        <div className="font-mono text-sm space-y-2 text-zinc-700 bg-white p-4 rounded border border-zinc-200">
+                            <div>Doc 1: ["apple", "banana"]</div>
+                            <div>Doc 2: ["banana", "cherry"]</div>
+                        </div>
+                        <div className="mt-4 text-xs text-zinc-500">
+                            <strong>Good for:</strong> Storage, Retreiving full document content.
+                            <br /><strong>Bad for:</strong> "Find docs with apple" (Must scan O(N)).
+                        </div>
+                    </div>
+                    <div className="bg-blue-50 p-6 rounded-xl border-2 border-blue-200">
+                        <div className="text-xs font-bold text-blue-500 uppercase mb-2">Inverted Index</div>
+                        <div className="text-xl font-bold text-blue-900 mb-4">Term → Documents</div>
+                        <div className="font-mono text-sm space-y-2 text-blue-800 bg-white p-4 rounded border border-blue-200">
+                            <div>"apple": [Doc 1]</div>
+                            <div>"banana": [Doc 1, Doc 2]</div>
+                        </div>
+                        <div className="mt-4 text-xs text-blue-600 font-bold">
+                            Good for: Search (O(1) lookup).
+                            <br />This is how search engines work.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* The Library Metaphor - Visual */}
             <section className="space-y-8">
                 <h2 className="text-3xl font-bold">The Card Catalog Problem</h2>
                 <p className="text-lg text-foreground leading-relaxed">
-                    Imagine a library with one million books. A visitor asks: <em>"Which books mention machine learning?"</em>
+                    To understand the necessity of an index, imagine a library with one million books arranged purely by arrival date.
+                    A visitor asks: <em>"Which books mention machine learning?"</em>. Without a lookup system, you would have to walk to the first shelf,
+                    open the first book, scan every page for the phrase, and then repeat this process for the remaining 999,999 books.
+                    This "linear scan" is how simple system tools like `grep` work, but it is impossible at scale.
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-8">
@@ -54,6 +100,59 @@ export default function Definition() {
                 </div>
             </section>
 
+            {/* Core Components & Construction */}
+            <section className="space-y-8">
+                <h2 className="text-3xl font-bold">Inside the Black Box: Index Structure</h2>
+                <div className="grid md:grid-cols-2 gap-8">
+                    <div className="space-y-4">
+                        <h3 className="text-xl font-bold text-foreground">1. Core Components</h3>
+                        <p className="text-foreground text-sm">An inverted index consists of two main parts:</p>
+                        <ul className="list-disc pl-5 space-y-2 text-sm text-foreground">
+                            <li><strong>Term Dictionary:</strong> A sorted list of all unique terms (vocabulary) in the corpus.</li>
+                            <li><strong>Posting Lists:</strong> For each term, a list of Document IDs that contain it.</li>
+                        </ul>
+                    </div>
+                    <div className="space-y-4">
+                        <h3 className="text-xl font-bold text-foreground">2. Positional Information</h3>
+                        <p className="text-foreground text-sm">
+                            To support phrase queries (<em>"San Francisco"</em>) and proximity search (<em>"limit" NEAR "speed"</em>), the index stores positions:
+                        </p>
+                        <div className="bg-zinc-900 rounded p-3 font-mono text-xs text-zinc-100">
+                            "limit": [<br />
+                            &nbsp;&nbsp;{`{ doc_id: 1, positions: [10, 24] },`}<br />
+                            &nbsp;&nbsp;{`{ doc_id: 5, positions: [2] }`}<br />
+                            ]
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-zinc-100 border border-zinc-200 p-6 rounded-xl">
+                    <h3 className="text-lg font-bold text-zinc-900 mb-4">How an Index is Built (Construction)</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div className="relative">
+                            <div className="font-bold text-zinc-700 mb-1">1. Tokenize</div>
+                            <div className="text-xs text-zinc-500">Break text into words</div>
+                            <div className="mt-2 font-mono text-xs bg-white p-2 border rounded">"Hello World" → ["Hello", "World"]</div>
+                        </div>
+                        <div>
+                            <div className="font-bold text-zinc-700 mb-1">2. Normalize</div>
+                            <div className="text-xs text-zinc-500">Lowercase, Stem</div>
+                            <div className="mt-2 font-mono text-xs bg-white p-2 border rounded">["hello", "world"]</div>
+                        </div>
+                        <div>
+                            <div className="font-bold text-zinc-700 mb-1">3. Group</div>
+                            <div className="text-xs text-zinc-500">Group by Term</div>
+                            <div className="mt-2 font-mono text-xs bg-white p-2 border rounded">hello: [doc1], world: [doc1]</div>
+                        </div>
+                        <div>
+                            <div className="font-bold text-zinc-700 mb-1">4. Write</div>
+                            <div className="text-xs text-zinc-500">Flush to Disk</div>
+                            <div className="mt-2 font-mono text-xs bg-white p-2 border rounded">Immutable Segment</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* The Fundamental Trade-off */}
             <section className="space-y-8">
                 <h2 className="text-3xl font-bold">The First Law of Search</h2>
@@ -64,8 +163,11 @@ export default function Definition() {
                 </div>
 
                 <p className="text-foreground leading-relaxed">
-                    This is not a free lunch. Every search system makes explicit trade-offs between write performance,
-                    storage requirements, and query speed. Understanding these trade-offs is fundamental to system design.
+                    This performance gain is not a free lunch. We are explicitly trading **write speed** and **storage space** to gain
+                    **read speed**. Every time you add a document, the system must spend significant CPU time analyzing the text and
+                    updating complex data structures. It also needs to store these structures on disk, often consuming 3-5x more space
+                    than the raw data itself. Understanding this "First Law" is critical: search engines are optimized for
+                    reading, not writing.
                 </p>
 
                 <div className="overflow-x-auto rounded-xl border-2 border-border">
@@ -80,18 +182,18 @@ export default function Definition() {
                         <tbody className="divide-y divide-border">
                             <tr className="bg-white">
                                 <td className="px-4 py-3 font-medium text-foreground">Write Speed</td>
-                                <td className="px-4 py-3 text-green-700 font-semibold">Fast — just append</td>
-                                <td className="px-4 py-3 text-amber-700 font-semibold">Slower — must analyze & index</td>
+                                <td className="px-4 py-3 text-green-700 font-semibold">Fast  just append</td>
+                                <td className="px-4 py-3 text-amber-700 font-semibold">Slower  must analyze & index</td>
                             </tr>
                             <tr className="bg-white">
                                 <td className="px-4 py-3 font-medium text-foreground">Text Search</td>
-                                <td className="px-4 py-3 text-red-700 font-bold">5000ms — full table scan</td>
-                                <td className="px-4 py-3 text-green-700 font-bold">5ms — index lookup</td>
+                                <td className="px-4 py-3 text-red-700 font-bold">5000ms  full table scan</td>
+                                <td className="px-4 py-3 text-green-700 font-bold">5ms  index lookup</td>
                             </tr>
                             <tr className="bg-white">
                                 <td className="px-4 py-3 font-medium text-foreground">Storage</td>
-                                <td className="px-4 py-3 text-foreground">1x — just the data</td>
-                                <td className="px-4 py-3 text-amber-700 font-semibold">3-5x — data + index structures</td>
+                                <td className="px-4 py-3 text-foreground">1x  just the data</td>
+                                <td className="px-4 py-3 text-amber-700 font-semibold">3-5x  data + index structures</td>
                             </tr>
                             <tr className="bg-white">
                                 <td className="px-4 py-3 font-medium text-foreground">Consistency</td>
@@ -107,8 +209,10 @@ export default function Definition() {
             <section className="space-y-8">
                 <h2 className="text-3xl font-bold">Anatomy of Document Indexing</h2>
                 <p className="text-foreground">
-                    When you add a document to a search engine, it doesn't simply store the raw data.
-                    It constructs multiple specialized data structures optimized for different query patterns.
+                    When you send a JSON document to a search engine, it doesn't simply store the file like a database or file system.
+                    Instead, it deconstructs the document field by field. It analyzes text, extracts numbers, and simultaneously
+                    routes different data types into specialized data structures. This process transforms a single "document" into
+                    entries across an Inverted Index (for text), BKD Trees (for numbers), and Columnar Stores (for sorting).
                 </p>
 
                 {/* Architecture Diagram */}
@@ -178,7 +282,7 @@ export default function Definition() {
             <section className="space-y-8">
                 <h2 className="text-3xl font-bold">The Index Hierarchy</h2>
                 <p className="text-foreground">
-                    A search "index" is not a single file—it's a distributed hierarchy designed for horizontal scaling and fault tolerance.
+                    A search "index" is not a single fileit's a distributed hierarchy designed for horizontal scaling and fault tolerance.
                 </p>
 
                 {/* Architecture Diagram */}
@@ -239,7 +343,7 @@ export default function Definition() {
                             <tr className="bg-red-50">
                                 <td className="px-4 py-3 font-medium text-foreground">Shards</td>
                                 <td className="px-4 py-3 text-foreground">Horizontal partitioning</td>
-                                <td className="px-4 py-3 text-red-700 font-bold">NO — fixed at creation</td>
+                                <td className="px-4 py-3 text-red-700 font-bold">NO  fixed at creation</td>
                             </tr>
                             <tr className="bg-white">
                                 <td className="px-4 py-3 font-medium text-foreground">Replicas</td>
@@ -259,6 +363,11 @@ export default function Definition() {
             {/* Creating an Index - Code */}
             <section className="space-y-6">
                 <h2 className="text-3xl font-bold">Creating an Index in Elasticsearch</h2>
+                <p className="text-foreground leading-relaxed">
+                    Now that we understand the theory, what does this look like in practice? When you create an index,
+                    you define its settings (infrastructure) and mappings (data structure). This is a one-time setup
+                    decision that is expensive to change later.
+                </p>
 
                 <div className="rounded-xl overflow-hidden border-2 border-zinc-300">
                     <div className="bg-zinc-200 px-4 py-2 text-sm font-mono text-zinc-700 border-b border-zinc-300">
@@ -320,6 +429,11 @@ export default function Definition() {
             {/* Sizing Guide */}
             <section className="space-y-6">
                 <h2 className="text-3xl font-bold">Capacity Planning Reference</h2>
+                <p className="text-foreground leading-relaxed">
+                    How big will your index be? As a rule of thumb, the index takes up 3-5x the raw storage space of
+                    your data due to the multiple data structures (Inverted Index, BKD Trees, DocValues, Stored Fields)
+                    maintained for each document.
+                </p>
 
                 <div className="grid md:grid-cols-3 gap-4">
                     <div className="rounded-xl border-2 border-border p-6 bg-white">
@@ -476,6 +590,26 @@ export default function Definition() {
                                 <li>• Small corpus with good keyword coverage</li>
                             </ul>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Real World Use Cases */}
+            <section className="space-y-6">
+                <h2 className="text-3xl font-bold">Indexes Beyond Search Engines</h2>
+                <p className="text-foreground">Inverted indexes aren't just for Google or Elasticsearch. They power:</p>
+                <div className="grid md:grid-cols-3 gap-4">
+                    <div className="bg-zinc-50 p-4 rounded-xl border-2 border-zinc-200">
+                        <div className="font-bold text-zinc-900 mb-1">Databases (Postgres GIN)</div>
+                        <div className="text-xs text-zinc-600">PostgreSQL uses GIN (Generalized Inverted Index) for JSONB and text search.</div>
+                    </div>
+                    <div className="bg-zinc-50 p-4 rounded-xl border-2 border-zinc-200">
+                        <div className="font-bold text-zinc-900 mb-1">Log Analytics</div>
+                        <div className="text-xs text-zinc-600">Splunk and Datadog use inverted indexes to find error logs instantly.</div>
+                    </div>
+                    <div className="bg-zinc-50 p-4 rounded-xl border-2 border-zinc-200">
+                        <div className="font-bold text-zinc-900 mb-1">E-Commerce Filters</div>
+                        <div className="text-xs text-zinc-600">Facet counts on sidebars are powered by inverted index aggregations.</div>
                     </div>
                 </div>
             </section>
