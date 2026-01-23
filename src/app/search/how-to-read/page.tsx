@@ -91,7 +91,7 @@ export default function HowToRead() {
                             <div className="text-sm"><span className="font-medium">0. How to Read This</span> — Philosophy, audience, curriculum</div>
                             <div className="text-sm"><span className="font-medium">1. Business & Product</span> — Why search matters, metrics, funnels</div>
                             <div className="text-sm"><span className="font-medium">2. Query Understanding</span> — Intent, tokenization, power laws</div>
-                            <div className="text-sm"><span className="font-medium">3. Data Foundation</span> — Document modeling, cleaning, freshness</div>
+                            <div className="text-sm"><span className="font-medium">3. Indexing & Infra</span> — Inverted index, BKD trees, HNSW</div>
                         </div>
                     </div>
 
@@ -99,7 +99,7 @@ export default function HowToRead() {
                     <div className="border border-border rounded-xl p-6">
                         <h3 className="font-bold text-lg mb-4">Part II: The Search Pipeline (Chapters 4-7)</h3>
                         <div className="grid gap-3 md:grid-cols-2">
-                            <div className="text-sm"><span className="font-medium">4. Indexing</span> — Inverted index, sharding, NRT</div>
+                            <div className="text-sm"><span className="font-medium">4. Data Foundation</span> — Modeling, cleaning, quality</div>
                             <div className="text-sm"><span className="font-medium">5. Retrieval</span> — BM25, filters, WAND, hybrid</div>
                             <div className="text-sm"><span className="font-medium">6. Vector Search</span> — Embeddings, HNSW, semantic</div>
                             <div className="text-sm"><span className="font-medium">7. Training Embeddings</span> — Contrastive learning, fine-tuning</div>
@@ -168,13 +168,13 @@ export default function HowToRead() {
                         <h3 className="font-bold mb-2 flex items-center gap-2">
                             <Code className="w-4 h-4 text-green-500" /> Practical (Builders)
                         </h3>
-                        <p className="text-sm text-muted-foreground">Chapters 0-1, then jump to 18 (Build from Scratch), return to 4-8 as needed.</p>
+                        <p className="text-sm text-muted-foreground">Chapters 0-1, then jump to 18 (Build from Scratch), return to 3-8 as needed.</p>
                     </div>
                     <div className="bg-background p-4 rounded-lg border border-border">
                         <h3 className="font-bold mb-2 flex items-center gap-2">
                             <Layers className="w-4 h-4 text-blue-500" /> Systems (Infra Engineers)
                         </h3>
-                        <p className="text-sm text-muted-foreground">Focus on: 4, 5, 12, 13, 14, 18</p>
+                        <p className="text-sm text-muted-foreground">Focus on: 3, 5, 12, 13, 14, 18</p>
                     </div>
                     <div className="bg-background p-4 rounded-lg border border-border">
                         <h3 className="font-bold mb-2 flex items-center gap-2">

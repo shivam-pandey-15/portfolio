@@ -35,31 +35,29 @@ This guide takes you through the complete lifecycle of building, deploying, and 
 - Query rewriting and expansion strategies
 - Handling ambiguous queries ("apple" → fruit or company?)
 
-### Chapter 3: Data - The Foundation
-*Your search is only as good as your data.*
-- Why search quality is primarily a data problem
-- Types of data: catalog, behavioral, contextual
-- Document modeling: flat vs hierarchical, attributes, facets
-- Text fields vs structured fields: when to use each
-- Data cleaning and normalization challenges
-- Freshness: batch vs streaming updates
-- Deletes, partial updates, and the reindexing problem
+### Chapter 3: Indexing & Infrastructure
+*The engine room.*
+- What an index actually is (read-optimized)
+- Inverted index from first principles: terms → documents
+- BKD trees and DocValues for structured data
+- Vector indices (HNSW) internals
+- Segments, immutability, and the merge lifecycle
+- Distributed architecture: sharding and replication
+- The write path (buffer to disk) and query path (scatter-gather)
 
 ---
 
 ## Part II: The Search Pipeline (Chapters 4-7)
 
-### Chapter 4: Ingestion & Indexing
-*How data becomes searchable.*
-- What an index actually is (and isn't)
-- Inverted index from first principles: terms → documents
-- Forward index: documents → terms
-- Column stores for filtering and faceting
-- Indexing structured + unstructured data together
-- Sharding strategies: by document, by term, by tenant
-- Replication for availability and throughput
-- Near real-time (NRT) indexing
-- Reindexing at scale without downtime
+### Chapter 4: Data Foundation
+*Garbage in, garbage out.*
+- Why search quality is primarily a data problem
+- Types of data: catalog, behavioral, contextual
+- Document modeling: flat vs nested vs parent-child
+- Text vs Structured: when to use which data structure
+- Data cleaning and normalization pipeline
+- Freshness: real-time vs consistency trade-offs
+- Deletes, partial updates, and the reindexing problem
 
 ### Chapter 5: Retrieval
 *Finding candidates fast.*
