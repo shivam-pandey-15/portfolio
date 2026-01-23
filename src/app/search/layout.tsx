@@ -145,7 +145,6 @@ export default function SearchLayout({
             <main className="flex-1 min-w-0">
                 <div className="container max-w-4xl mx-auto p-6 md:p-12 lg:p-16">
                     {children}
-                    <AdSection />
                 </div>
             </main>
         </div>
