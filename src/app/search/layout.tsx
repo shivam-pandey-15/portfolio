@@ -6,6 +6,7 @@ import { searchNavConfig } from "@/config/search-nav";
 import { cn } from "@/lib/utils";
 import { Menu, X, ChevronRight, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import AdSection from "@/components/AdSection";
 
 export default function SearchLayout({
     children,
@@ -144,6 +145,7 @@ export default function SearchLayout({
             <main className="flex-1 min-w-0">
                 <div className="container max-w-4xl mx-auto p-6 md:p-12 lg:p-16">
                     {children}
+                    <AdSection />
                 </div>
             </main>
         </div>
