@@ -51,60 +51,6 @@ export default function Home() {
           </div>
         </Link>
 
-        {/* Recommender Systems - Coming Soon */}
-        <div className="block h-full group opacity-75 cursor-not-allowed">
-          <div className="h-full border border-border rounded-xl p-6 bg-card/50 flex flex-col grayscale-0">
-            <div className="mb-4 p-3 bg-secondary w-fit rounded-lg">
-              <Activity className="w-6 h-6 text-muted-foreground" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2 flex items-center gap-2 text-muted-foreground">
-              Recommender Systems
-              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-secondary text-muted-foreground border border-border">
-                Soon
-              </span>
-            </h3>
-            <p className="text-muted-foreground flex-grow">
-              Collaborative filtering, two-tower models, and real-time candidate generation at scale.
-            </p>
-          </div>
-        </div>
-
-        {/* Caching & Performance - Coming Soon */}
-        <div className="block h-full group opacity-75 cursor-not-allowed">
-          <div className="h-full border border-border rounded-xl p-6 bg-card/50 flex flex-col">
-            <div className="mb-4 p-3 bg-secondary w-fit rounded-lg">
-              <Database className="w-6 h-6 text-muted-foreground" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2 flex items-center gap-2 text-muted-foreground">
-              Caching & Performance
-              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-secondary text-muted-foreground border border-border">
-                Soon
-              </span>
-            </h3>
-            <p className="text-muted-foreground flex-grow">
-              Cache coherence, invalidation strategies, CDNs, and edge computing patterns.
-            </p>
-          </div>
-        </div>
-
-        {/* Infra at Scale - Coming Soon */}
-        <div className="block h-full group opacity-75 cursor-not-allowed">
-          <div className="h-full border border-border rounded-xl p-6 bg-card/50 flex flex-col">
-            <div className="mb-4 p-3 bg-secondary w-fit rounded-lg">
-              <Server className="w-6 h-6 text-muted-foreground" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2 flex items-center gap-2 text-muted-foreground">
-              Infra at Scale
-              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-secondary text-muted-foreground border border-border">
-                Soon
-              </span>
-            </h3>
-            <p className="text-muted-foreground flex-grow">
-              Kubernetes, service mesh, observability, and distributed systems patterns.
-            </p>
-          </div>
-        </div>
-
       </section>
     </div>
   );

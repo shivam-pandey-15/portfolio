@@ -1,0 +1,1 @@
+export default function Page() { return <div className="p-8"><h1 className="text-3xl font-bold">2. Understanding the User Query</h1><p className="mt-4 text-muted-foreground">Content coming soon...</p></div>; }
