@@ -1,164 +1,352 @@
-import { ArrowRight, BarChart3, Cloud, Layout, Search, Zap } from "lucide-react";
+"use client";
+
+import { BarChart3, TrendingUp, DollarSign, Settings, ArrowRight, ArrowLeft, Code2 } from "lucide-react";
 import Link from "next/link";
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
+
+const distributionData = [
+    { name: "Head (1%)", queries: 30, color: "#ef4444" },
+    { name: "Torso (10%)", queries: 30, color: "#f59e0b" },
+    { name: "Tail (89%)", queries: 40, color: "#22c55e" },
+];
+
+const investmentData = [
+    { name: "Head", investment: 40, impact: 50 },
+    { name: "Torso", investment: 30, impact: 30 },
+    { name: "Tail", investment: 30, impact: 20 },
+];
+
+const tailCurveData = Array.from({ length: 50 }, (_, i) => ({
+    rank: i + 1,
+    frequency: Math.pow(1 / (i + 1), 0.8) * 100,
+}));
 
 export default function PowerLawsPage() {
     return (
         <div className="space-y-12 animate-in fade-in duration-500">
             {/* Header */}
             <div className="space-y-4">
-                <h1 className="text-4xl font-bold tracking-tight text-primary">2.4 Query Distributions & Power Laws</h1>
+                <p className="text-sm text-muted-foreground">Chapter 2.4</p>
+                <h1 className="text-4xl font-bold tracking-tight">Power Laws in Search</h1>
                 <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
-                    Why 20% of your queries generate 80% of your traffic, and why the remaining 80% are the hardest to solve.
+                    Query distribution follows a power law: a tiny fraction of queries generate most traffic.
                 </p>
             </div>
 
             <hr className="border-border" />
 
-            {/* The Concept */}
+            {/* Power Law Curve */}
             <section className="space-y-6">
-                <h2 className="text-2xl font-semibold">The Zipfian Reality</h2>
-                <div className="prose prose-slate dark:prose-invert max-w-none text-muted-foreground">
-                    <p>
-                        In almost every search system—whether web search (Google), e-commerce (Amazon), or media (Spotify)—user queries follow a <strong>Power Law distribution</strong>, specifically <a href="https://en.wikipedia.org/wiki/Zipf%27s_law" target="_blank" className="text-primary hover:underline">Zipf's Law</a>.
-                    </p>
-                    <p>
-                        Mathematician George Zipf observed that the frequency of any word is inversely proportional to its rank in the frequency table. In search, this means:
-                    </p>
-                    <blockquote className="border-l-4 border-primary pl-4 italic my-4">
-                        The most popular query is searched twice as often as the second most popular query, and three times as often as the third, and so on.
-                    </blockquote>
-                </div>
-
-                {/* Visualizer (CSS Chart) */}
-                <div className="bg-secondary/20 p-8 rounded-xl border border-border">
-                    <h3 className="font-semibold text-lg mb-6">The Search Demand Curve</h3>
-                    <div className="flex items-end justify-between h-48 gap-2 px-4 pb-4 border-b border-border/50">
-                        {/* Head */}
-                        <div className="w-1/4 h-full bg-primary/20 rounded-t-sm flex flex-col justify-end group relative">
-                            <div className="bg-primary w-full h-[80%] rounded-t-sm transition-all group-hover:bg-primary/90" />
-                            <div className="absolute -bottom-8 left-0 w-full text-center text-xs font-bold text-primary">Head</div>
-                            <div className="absolute top-2 w-full text-center text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                                "iphone"
-                            </div>
-                        </div>
-                        {/* Torso */}
-                        <div className="w-1/3 h-full bg-orange-500/10 rounded-t-sm flex flex-col justify-end group relative">
-                            <div className="bg-orange-500 w-full h-[30%] rounded-t-sm transition-all group-hover:bg-orange-500/90" />
-                            <div className="absolute -bottom-8 left-0 w-full text-center text-xs font-bold text-orange-600">Torso</div>
-                            <div className="absolute top-[50%] w-full text-center text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                                "iphone 15 pro case"
-                            </div>
-                        </div>
-                        {/* Tail */}
-                        <div className="w-1/2 h-full bg-blue-500/10 rounded-t-sm flex flex-col justify-end group relative">
-                            <div className="bg-blue-500 w-full h-[5%] rounded-t-sm transition-all group-hover:bg-blue-500/90" />
-                            <div className="absolute -bottom-8 left-0 w-full text-center text-xs font-bold text-blue-600">Long Tail</div>
-                            <div className="absolute top-[80%] w-full text-center text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                                "blue silicone case for iphone 15..."
-                            </div>
-                        </div>
-                    </div>
-                    <div className="pt-8 text-sm text-center text-muted-foreground">
-                        Rank of Query (Frequency &rarr;)
-                    </div>
-                </div>
-            </section>
-
-            {/* Engineering Strategies */}
-            <section className="space-y-8">
-                <h2 className="text-2xl font-semibold">Engineering Strategy by Segment</h2>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {/* The Head */}
-                    <div className="border border-border rounded-xl p-6 bg-card">
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="p-2 bg-primary/10 rounded-md text-primary"><Zap size={20} /></div>
-                            <h3 className="font-bold">The Head</h3>
-                        </div>
-                        <div className="space-y-3 text-sm text-muted-foreground">
-                            <p><span className="font-semibold text-foreground">Docs:</span> Top 20%</p>
-                            <p><span className="font-semibold text-foreground">Traffic:</span> ~70-80%</p>
-                            <hr className="border-border/50" />
-                            <p className="font-medium text-foreground">Tactics:</p>
-                            <ul className="list-disc list-inside space-y-1">
-                                <li>Aggressive Caching (Redis/CDN)</li>
-                                <li>Manual Curation / Merchandising</li>
-                                <li>Pre-computed result sets</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    {/* The Torso */}
-                    <div className="border border-border rounded-xl p-6 bg-card">
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="p-2 bg-orange-500/10 rounded-md text-orange-600"><Layout size={20} /></div>
-                            <h3 className="font-bold">The Torso</h3>
-                        </div>
-                        <div className="space-y-3 text-sm text-muted-foreground">
-                            <p><span className="font-semibold text-foreground">Docs:</span> Middle 30%</p>
-                            <p><span className="font-semibold text-foreground">Traffic:</span> ~15-20%</p>
-                            <hr className="border-border/50" />
-                            <p className="font-medium text-foreground">Tactics:</p>
-                            <ul className="list-disc list-inside space-y-1">
-                                <li>Query Expansion</li>
-                                <li>Synonym Mapping</li>
-                                <li>Spell Correction</li>
-                                <li>Standard Ranking Models</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    {/* The Tail */}
-                    <div className="border border-border rounded-xl p-6 bg-card">
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="p-2 bg-blue-500/10 rounded-md text-blue-600"><Search size={20} /></div>
-                            <h3 className="font-bold">The Long Tail</h3>
-                        </div>
-                        <div className="space-y-3 text-sm text-muted-foreground">
-                            <p><span className="font-semibold text-foreground">Docs:</span> Bottom 50%</p>
-                            <p><span className="font-semibold text-foreground">Traffic:</span> ~5-10%</p>
-                            <hr className="border-border/50" />
-                            <p className="font-medium text-foreground">Tactics:</p>
-                            <ul className="list-disc list-inside space-y-1">
-                                <li>Vector Search (Embeddings)</li>
-                                <li>LLM / RAG Pipelines</li>
-                                <li>Zero-result Fallbacks</li>
-                                <li>No Caching (Hit rate ~0%)</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* References */}
-            <section className="bg-secondary/20 p-8 rounded-xl border border-border">
-                <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                    <Cloud className="w-5 h-5" /> References & Further Reading
+                <h2 className="text-2xl font-semibold flex items-center gap-2">
+                    <TrendingUp className="w-6 h-6" /> The Power Law Distribution
                 </h2>
-                <ul className="space-y-3 text-muted-foreground text-sm">
-                    <li>
-                        <span className="font-semibold text-foreground">1. The Long Tail.</span> Chris Anderson (2004).
-                        <span className="italic"> Wired Magazine.</span> The foundational piece on how the internet shifts focus from mass markets to niches.
-                    </li>
-                    <li>
-                        <span className="font-semibold text-foreground">2. Introduction to Information Retrieval.</span> Manning, Raghavan, Schütze (2008).
-                        <a href="https://nlp.stanford.edu/IR-book/" target="_blank" className="text-primary hover:underline ml-1">
-                            Chapter 5: Index compression (Zipf's law discussion)
-                        </a>.
-                    </li>
-                    <li>
-                        <span className="font-semibold text-foreground">3. Analysis of Query Logs.</span> Ricardo Baeza-Yates (2005).
-                        Discusses the distribution of web queries and the implications for caching.
-                    </li>
-                </ul>
+
+                <p className="text-muted-foreground">
+                    This curve (Zipf's Law) represents one of the most fundamental truths in search.
+                    The "Head" (red) represents safe, frequent queries. The "Tail" (green) is where the complexity—and often the high-value intent—lives.
+                </p>
+
+                <div className="border border-border rounded-xl p-6">
+                    <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={tailCurveData}>
+                                <CartesianGrid strokeDasharray="3 3" opacity={0.1} stroke="#444" />
+                                <XAxis dataKey="rank" label={{ value: "Query Rank", position: "bottom", offset: -5, fill: "#888" }} stroke="#888" tickLine={false} axisLine={false} />
+                                <YAxis label={{ value: "Frequency", angle: -90, position: "insideLeft", fill: "#888" }} stroke="#888" tickLine={false} axisLine={false} />
+                                <Tooltip
+                                    contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }}
+                                />
+                                <defs>
+                                    <linearGradient id="colorFreq" x1="0" y1="0" x2="1" y2="0">
+                                        <stop offset="0%" stopColor="#ef4444" stopOpacity={0.8} />
+                                        <stop offset="20%" stopColor="#f59e0b" stopOpacity={0.6} />
+                                        <stop offset="100%" stopColor="#22c55e" stopOpacity={0.4} />
+                                    </linearGradient>
+                                </defs>
+                                <Area type="monotone" dataKey="frequency" stroke="#6366f1" fill="url(#colorFreq)" />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="flex justify-center gap-6 mt-4 text-sm">
+                        <span className="flex items-center gap-2">
+                            <span className="w-3 h-3 rounded-full bg-red-500" /> Head
+                        </span>
+                        <span className="flex items-center gap-2">
+                            <span className="w-3 h-3 rounded-full bg-yellow-500" /> Torso
+                        </span>
+                        <span className="flex items-center gap-2">
+                            <span className="w-3 h-3 rounded-full bg-green-500" /> Tail
+                        </span>
+                    </div>
+                </div>
             </section>
 
-            <div className="flex justify-between pt-8">
-                <Link href="/search/query-understanding/intent" className="text-sm font-medium text-muted-foreground hover:text-primary flex items-center">
-                    ← 2.3 Intent vs Tokens
+            {/* Code Example */}
+            <section className="space-y-6">
+                <h2 className="text-2xl font-semibold flex items-center gap-2">
+                    <Code2 className="w-6 h-6" /> Adaptive Optimization Strategy
+                </h2>
+
+                <p className="text-muted-foreground">
+                    We can't treat all queries the same. In code, we apply different time-to-live (TTL) and processing depths based on query frequency.
+                </p>
+
+                <div className="bg-[#1e1e1e] rounded-xl overflow-hidden text-sm font-mono border border-border">
+                    <div className="flex items-center justify-between px-4 py-2 bg-[#2d2d2d] border-b border-border">
+                        <span className="text-muted-foreground">optimization.py</span>
+                        <div className="flex gap-1.5">
+                            <div className="w-3 h-3 rounded-full bg-red-500/20" />
+                            <div className="w-3 h-3 rounded-full bg-yellow-500/20" />
+                            <div className="w-3 h-3 rounded-full bg-green-500/20" />
+                        </div>
+                    </div>
+                    <div className="p-4 overflow-x-auto">
+                        <div className="flex flex-col gap-0.5">
+                            <div>
+                                <span className="text-blue-400">def</span> <span className="text-yellow-300">get_optimization_config</span><span className="text-white">(query: str, frequency: int):</span>
+                            </div>
+                            <div className="pl-4">
+                                <span className="text-green-400"># HEAD Queries (Top 1%)</span>
+                            </div>
+                            <div className="pl-4">
+                                <span className="text-green-400"># Strategy: Aggressive Caching, Pre-computed Results</span>
+                            </div>
+                            <div className="pl-4">
+                                <span className="text-pink-400">if</span> <span className="text-white">frequency &gt; </span><span className="text-orange-300">100000</span><span className="text-white">:</span>
+                            </div>
+                            <div className="pl-8">
+                                <span className="text-pink-400">return</span> <span className="text-white">{'{'}</span>
+                            </div>
+                            <div className="pl-12">
+                                <span className="text-green-300">"cache_ttl"</span><span className="text-white">: </span><span className="text-orange-300">3600</span><span className="text-white">, </span><span className="text-green-400"># Cache for 1 hour</span>
+                            </div>
+                            <div className="pl-12">
+                                <span className="text-green-300">"enable_deep_learning_rerank"</span><span className="text-white">: </span><span className="text-blue-400">False</span><span className="text-white">, </span><span className="text-green-400"># Too slow, use pre-compute</span>
+                            </div>
+                            <div className="pl-12">
+                                <span className="text-green-300">"use_approximate_knn"</span><span className="text-white">: </span><span className="text-blue-400">False</span> <span className="text-green-400"># Need exact top results</span>
+                            </div>
+                            <div className="pl-8">
+                                <span className="text-white">{'}'}</span>
+                            </div>
+                            <div className="pl-8">
+                                <span className="text-white"> </span>
+                            </div>
+                            <div className="pl-4">
+                                <span className="text-green-400"># TAIL Queries (Bottom 90%)</span>
+                            </div>
+                            <div className="pl-4">
+                                <span className="text-green-400"># Strategy: Expensive Compute, No Caching</span>
+                            </div>
+                            <div className="pl-4">
+                                <span className="text-pink-400">elif</span> <span className="text-white">frequency &lt; </span><span className="text-orange-300">100</span><span className="text-white">:</span>
+                            </div>
+                            <div className="pl-8">
+                                <span className="text-pink-400">return</span> <span className="text-white">{'{'}</span>
+                            </div>
+                            <div className="pl-12">
+                                <span className="text-green-300">"cache_ttl"</span><span className="text-white">: </span><span className="text-orange-300">60</span><span className="text-white">, </span><span className="text-green-400"># Cache for 1 min (rarely hit again)</span>
+                            </div>
+                            <div className="pl-12">
+                                <span className="text-green-300">"enable_deep_learning_rerank"</span><span className="text-white">: </span><span className="text-blue-400">True</span><span className="text-white">, </span><span className="text-green-400"># Need semantics to understand</span>
+                            </div>
+                            <div className="pl-12">
+                                <span className="text-green-300">"use_approximate_knn"</span><span className="text-white">: </span><span className="text-blue-400">True</span><span className="text-white">, </span><span className="text-green-400"># Approximate is fine for recall</span>
+                            </div>
+                            <div className="pl-12">
+                                <span className="text-green-300">"query_expansion"</span><span className="text-white">: </span><span className="text-green-300">"aggressive"</span> <span className="text-green-400"># Try hard to find matches</span>
+                            </div>
+                            <div className="pl-8">
+                                <span className="text-white">{'}'}</span>
+                            </div>
+                            <div className="pl-8">
+                                <span className="text-white"> </span>
+                            </div>
+                            <div className="pl-4">
+                                <span className="text-green-400"># TORSO</span>
+                            </div>
+                            <div className="pl-4">
+                                <span className="text-pink-400">return</span> <span className="text-white">{'{'}</span><span className="text-green-300">"cache_ttl"</span><span className="text-white">: </span><span className="text-orange-300">600</span><span className="text-white">, </span><span className="text-green-300">"enable_deep_learning_rerank"</span><span className="text-white">: </span><span className="text-blue-400">True</span><span className="text-white">{'}'}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Traffic Distribution */}
+            <section className="space-y-6">
+                <h2 className="text-2xl font-semibold flex items-center gap-2">
+                    <BarChart3 className="w-6 h-6" /> Traffic Distribution
+                </h2>
+
+                <p className="text-muted-foreground">
+                    A visual breakdown of how a small percentage of distinct queries accounts for the massive majority of total search volume.
+                </p>
+
+                <div className="grid gap-6 lg:grid-cols-2">
+                    {/* Pie Chart */}
+                    <div className="border border-border rounded-xl p-6">
+                        <h3 className="font-bold mb-4 text-center">% of Total Traffic</h3>
+                        <div className="h-64">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={distributionData}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={60}
+                                        outerRadius={100}
+                                        dataKey="queries"
+                                        label={({ name, percent }: any) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                                        labelLine={false}
+                                    >
+                                        {distributionData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.color} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+
+                    {/* Stats Grid */}
+                    <div className="grid gap-4 grid-cols-1">
+                        <div className="border border-red-500/30 rounded-xl p-5 bg-red-500/5">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm text-muted-foreground">Head Queries</p>
+                                    <p className="text-2xl font-bold">1% of unique</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-3xl font-bold text-red-500">30%</p>
+                                    <p className="text-xs text-muted-foreground">of traffic</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="border border-yellow-500/30 rounded-xl p-5 bg-yellow-500/5">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm text-muted-foreground">Torso Queries</p>
+                                    <p className="text-2xl font-bold">10% of unique</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-3xl font-bold text-yellow-500">30%</p>
+                                    <p className="text-xs text-muted-foreground">of traffic</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="border border-green-500/30 rounded-xl p-5 bg-green-500/5">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm text-muted-foreground">Tail Queries</p>
+                                    <p className="text-2xl font-bold">89% of unique</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-3xl font-bold text-green-500">40%</p>
+                                    <p className="text-xs text-muted-foreground">of traffic</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Infrastructure Implications */}
+            <section className="space-y-6">
+                <h2 className="text-2xl font-semibold flex items-center gap-2">
+                    <Settings className="w-6 h-6" /> The Scalability Paradox
+                </h2>
+                <div className="grid gap-6 md:grid-cols-2">
+                    <div className="border border-border rounded-xl p-5">
+                        <h3 className="font-bold mb-3 flex items-center gap-2">
+                            <span className="p-1.5 bg-red-500/10 rounded text-red-500"><Settings className="w-4 h-4" /></span>
+                            Head Queries = CPU Problem
+                        </h3>
+                        <p className="text-sm text-muted-foreground mb-4">
+                            High QPS (Queries Per Second). Serving "iphone" 10,000 times/sec requires massive compute if not cached.
+                        </p>
+                        <ul className="text-xs space-y-2 bg-secondary/30 p-3 rounded font-mono">
+                            <li className="flex justify-between">
+                                <span>Cache Hit Rate</span>
+                                <span className="text-green-500">99.9%</span>
+                            </li>
+                            <li className="flex justify-between">
+                                <span>Latency Target</span>
+                                <span className="text-green-500">&lt; 10ms</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="border border-border rounded-xl p-5">
+                        <h3 className="font-bold mb-3 flex items-center gap-2">
+                            <span className="p-1.5 bg-green-500/10 rounded text-green-500"><Settings className="w-4 h-4" /></span>
+                            Tail Queries = IO Problem
+                        </h3>
+                        <p className="text-sm text-muted-foreground mb-4">
+                            Huge Index. Serving "1994 toyota corolla alternator bolt size" requires scanning massive indices on disk.
+                        </p>
+                        <ul className="text-xs space-y-2 bg-secondary/30 p-3 rounded font-mono">
+                            <li className="flex justify-between">
+                                <span>Cache Hit Rate</span>
+                                <span className="text-red-500">&lt; 5%</span>
+                            </li>
+                            <li className="flex justify-between">
+                                <span>Latency Target</span>
+                                <span className="text-yellow-500">&lt; 200ms</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            {/* Strategies by Segment */}
+            <section className="space-y-6">
+                <h2 className="text-2xl font-semibold flex items-center gap-2">
+                    <Settings className="w-6 h-6" /> Strategies by Segment
+                </h2>
+
+                <div className="grid gap-4 md:grid-cols-3">
+                    <div className="border border-red-500/30 rounded-xl p-5 bg-red-500/5">
+                        <h3 className="font-bold mb-3 text-red-500">Head Strategy</h3>
+                        <ul className="text-sm text-muted-foreground space-y-2">
+                            <li>• Manual tuning & curation</li>
+                            <li>• Heavy caching (5 min TTL)</li>
+                            <li>• Dedicated A/B testing</li>
+                            <li>• Query-specific rules</li>
+                        </ul>
+                    </div>
+
+                    <div className="border border-yellow-500/30 rounded-xl p-5 bg-yellow-500/5">
+                        <h3 className="font-bold mb-3 text-yellow-500">Torso Strategy</h3>
+                        <ul className="text-sm text-muted-foreground space-y-2">
+                            <li>• Category-level rules</li>
+                            <li>• Template matching</li>
+                            <li>• Click models (aggregated)</li>
+                            <li>• Facet optimization</li>
+                        </ul>
+                    </div>
+
+                    <div className="border border-green-500/30 rounded-xl p-5 bg-green-500/5">
+                        <h3 className="font-bold mb-3 text-green-500">Tail Strategy</h3>
+                        <ul className="text-sm text-muted-foreground space-y-2">
+                            <li>• Semantic/vector search</li>
+                            <li>• Query relaxation</li>
+                            <li>• Fallback strategies</li>
+                            <li>• LLM rewriting</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            {/* Navigation */}
+            <div className="flex justify-between pt-8 border-t border-border">
+                <Link href="/search/query-understanding/intent" className="text-sm font-medium text-muted-foreground hover:text-primary flex items-center gap-2">
+                    <ArrowLeft className="w-4 h-4" /> Intent vs Tokens
                 </Link>
-                <Link href="/search/query-understanding/pipeline" className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-                    Next: Understanding Pipeline <ArrowRight className="ml-2 h-4 w-4" />
+                <Link href="/search/query-understanding/pipeline" className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:bg-primary/90">
+                    Next: Understanding Pipeline <ArrowRight className="w-4 h-4" />
                 </Link>
             </div>
         </div>
