@@ -21,7 +21,7 @@ export default function Vectors() {
                 <h2 className="text-3xl font-bold">Meaning as Mathematical Coordinates</h2>
                 <p className="text-foreground leading-relaxed">
                     How do you explain the meaning of "Queen" to a computer? You don't. You convert it into coordinates.
-                    Modern embedding models (like OpenAI's text-embedding-3 or BERT) convert text into "vectors"—fixed-length
+                    Modern embedding models (like OpenAI's text-embedding-3 or BERT) convert text into "vectors" fixed-length
                     arrays of numbers that position concepts in a multi-dimensional semantic space. In this space, similarity isn't
                     about shared letters; it's about proximity. "Cat" and "Kitten" are neighbors, even though they share no characters.
                 </p>
@@ -86,7 +86,7 @@ export default function Vectors() {
                     To find the closest match in this space, the naive approach is to measure the distance from your query vector
                     to <em>every single document vector</em> in your database. This is called "Exact kNN". It works perfectly for small datasets,
                     but the math is heavy. With 100 million documents and 768 dimensions per vector, a single query requires ~76 billion
-                    floating-point operations. That takes seconds—far too slow for search.
+                    floating-point operations. That takes seconds far too slow for search.
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-8">

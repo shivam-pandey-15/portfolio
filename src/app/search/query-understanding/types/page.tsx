@@ -99,6 +99,11 @@ export default function TypesPage() {
                 <h2 className="text-2xl font-semibold flex items-center gap-2">
                     <BarChart3 className="w-6 h-6" /> Query Classification in Production
                 </h2>
+                <p className="text-muted-foreground">
+                    Production systems classify queries in real-time to route them appropriately. Each query type has
+                    a different primary goal, success metric, and failure state. Understanding these differences helps
+                    you build specialized handling for each type rather than treating all queries the same.
+                </p>
                 <div className="border border-border rounded-xl overflow-hidden">
                     <table className="w-full text-sm text-left">
                         <thead className="bg-secondary/40 border-b border-border">
@@ -198,6 +203,11 @@ export default function TypesPage() {
                 <h2 className="text-2xl font-semibold flex items-center gap-2">
                     <Lightbulb className="w-6 h-6" /> Structure & Frequency
                 </h2>
+                <p className="text-muted-foreground">
+                    Query distribution follows a classic power law: a small number of "fat head" queries drive most of your traffic,
+                    while an infinite "long tail" of rare, specific queries makes up the rest. Each segment requires different
+                    optimization strategies caching works great for the head, but the tail needs robust query rewriting.
+                </p>
 
                 <div className="grid gap-6 md:grid-cols-2">
                     <div className="border border-border rounded-xl p-5">
@@ -239,6 +249,11 @@ export default function TypesPage() {
             {/* Detailed Types Grid */}
             <section className="space-y-6">
                 <h2 className="text-2xl font-semibold">The 4 Main Types</h2>
+                <p className="text-muted-foreground">
+                    Every query falls into one of four primary categories based on user intent. Correctly classifying the type
+                    allows you to customize the entire search experience from which index to query, to how results are ranked,
+                    to what UI treatment they receive. Getting this classification wrong leads to fundamental UX failures.
+                </p>
 
                 <div className="grid gap-6 md:grid-cols-2">
                     {/* Informational */}

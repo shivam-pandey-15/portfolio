@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Layers, Target, User, ArrowRight, ArrowLeft, AlertCircle, CheckCircle2, BarChart3, Code2 } from "lucide-react";
+import { Search, Layers, Target, User, ArrowRight, ArrowLeft, AlertCircle, CheckCircle2, BarChart3, Code2, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Legend } from "recharts";
 
@@ -28,6 +28,11 @@ export default function DefinitionPage() {
             {/* Query Anatomy Visual */}
             <section className="space-y-6">
                 <h2 className="text-2xl font-semibold">The Anatomy of a Query</h2>
+                <p className="text-muted-foreground">
+                    When a user types "running shoes", they aren't just entering two words they're compressing an entire mental model
+                    into a brief search term. The gap between what they typed and what they meant represents the core challenge
+                    of query understanding. Let's visualize this compression.
+                </p>
 
                 <div className="grid gap-6 lg:grid-cols-2">
                     {/* What user typed */}
@@ -291,6 +296,11 @@ export default function DefinitionPage() {
                 <h2 className="text-2xl font-semibold flex items-center gap-2">
                     <Layers className="w-6 h-6" /> Query Components
                 </h2>
+                <p className="text-muted-foreground">
+                    Every query can be decomposed into four fundamental components. Understanding these building blocks
+                    helps you design pipelines that extract maximum signal from minimal input. Each component requires
+                    different processing techniques and contributes uniquely to the final understanding.
+                </p>
 
                 <div className="grid gap-4 md:grid-cols-2">
                     <div className="border border-border rounded-xl p-5">
@@ -339,72 +349,177 @@ export default function DefinitionPage() {
                 <h2 className="text-2xl font-semibold flex items-center gap-2">
                     <BarChart3 className="w-6 h-6" /> Real-World Case Studies
                 </h2>
+                <p className="text-muted-foreground">
+                    Query understanding isn't one-size-fits-all. Different domains require radically different approaches.
+                    These case studies from industry giants show how context, domain expertise, and user behavior shape
+                    the entire query understanding pipeline.
+                </p>
 
-                <div className="grid gap-6 md:grid-cols-3">
+                <div className="space-y-6">
                     {/* Flipkart */}
-                    <div className="border border-border rounded-xl p-5">
-                        <div className="flex items-center gap-2 mb-3">
-                            <span className="px-2 py-0.5 bg-yellow-500/20 text-yellow-500 rounded text-xs font-bold">FLIPKART</span>
-                            <span className="font-bold text-sm">Sale Events</span>
+                    <div className="rounded-xl border-2 border-amber-500 bg-amber-50 overflow-hidden">
+                        <div className="bg-amber-500 text-white px-6 py-3 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <ShoppingCart className="w-5 h-5" />
+                                <span className="font-bold">FLIPKART</span>
+                                <span className="text-amber-100 text-sm">E-commerce Sale Events</span>
+                            </div>
+                            <span className="text-xs bg-amber-600 px-2 py-1 rounded">100M+ searches/hour</span>
                         </div>
-                        <p className="text-sm text-muted-foreground mb-3">
-                            During "Big Billion Days", 100M+ searches/hour. Query patterns shift dramatically.
-                        </p>
-                        <ul className="text-xs space-y-2 bg-secondary/30 p-3 rounded">
-                            <li className="flex justify-between">
-                                <span>"mobile under 15000"</span>
-                                <span className="font-mono text-muted-foreground">35%</span>
-                            </li>
-                            <li className="flex justify-between">
-                                <span>"laptop discount"</span>
-                                <span className="font-mono text-muted-foreground">20%</span>
-                            </li>
-                            <li className="text-muted-foreground italic mt-2">
-                                Price becomes the dominant intent signal during sales.
-                            </li>
-                        </ul>
+                        <div className="p-6 grid md:grid-cols-2 gap-6">
+                            <div className="space-y-4">
+                                <h4 className="font-bold text-amber-800">The Challenge</h4>
+                                <p className="text-sm text-amber-900">
+                                    During "Big Billion Days", query patterns shift dramatically. Price becomes the dominant
+                                    intent signal users who normally search by brand switch to searching by budget.
+                                </p>
+                                <div className="bg-zinc-900 rounded-lg p-4 font-mono text-sm overflow-x-auto">
+                                    <div className="text-zinc-500 mb-2"># Normal Day vs Sale Day</div>
+                                    <div className="flex justify-between">
+                                        <span className="text-zinc-400">Normal:</span>
+                                        <span className="text-green-400">"iPhone 15 Pro Max"</span>
+                                    </div>
+                                    <div className="flex justify-between mt-1">
+                                        <span className="text-zinc-400">Sale:</span>
+                                        <span className="text-amber-400">"mobile under 15000"</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <h4 className="font-bold text-amber-800">Query Distribution Shift</h4>
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-full bg-amber-200 rounded-full h-4">
+                                            <div className="bg-amber-600 h-4 rounded-full" style={{ width: '65%' }}></div>
+                                        </div>
+                                        <span className="text-xs font-mono text-amber-800 w-12">65%</span>
+                                    </div>
+                                    <p className="text-xs text-amber-700">Price-based queries ("under X", "discount")</p>
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-full bg-amber-200 rounded-full h-4">
+                                            <div className="bg-amber-400 h-4 rounded-full" style={{ width: '25%' }}></div>
+                                        </div>
+                                        <span className="text-xs font-mono text-amber-800 w-12">25%</span>
+                                    </div>
+                                    <p className="text-xs text-amber-700">Brand + discount queries</p>
+                                </div>
+                                <div className="bg-amber-100 border border-amber-300 p-3 rounded-lg text-xs text-amber-800">
+                                    <strong>Insight:</strong> Intent classifiers must be retrained for sale events or use dynamic confidence thresholds.
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Stack Overflow */}
-                    <div className="border border-border rounded-xl p-5">
-                        <div className="flex items-center gap-2 mb-3">
-                            <span className="px-2 py-0.5 bg-orange-500/20 text-orange-500 rounded text-xs font-bold">STACK OVERFLOW</span>
-                            <span className="font-bold text-sm">Code Search</span>
+                    <div className="rounded-xl border-2 border-orange-500 bg-orange-50 overflow-hidden">
+                        <div className="bg-orange-500 text-white px-6 py-3 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <Code2 className="w-5 h-5" />
+                                <span className="font-bold">STACK OVERFLOW</span>
+                                <span className="text-orange-100 text-sm">Developer Code Search</span>
+                            </div>
+                            <span className="text-xs bg-orange-600 px-2 py-1 rounded">50M queries/day</span>
                         </div>
-                        <p className="text-sm text-muted-foreground mb-3">
-                            Developers search differently. Exact syntax and error codes matter.
-                        </p>
-                        <div className="text-xs space-y-2 bg-secondary/30 p-3 rounded font-mono">
-                            <p className="text-red-400">"TypeError: Cannot read property 'x'"</p>
-                            <p className="text-blue-400">"useEffect" ≠ "use effect"</p>
-                            <p className="text-muted-foreground italic font-sans mt-2">
-                                Requires custom tokenizers that preserve symbols like [], (), ===.
-                            </p>
+                        <div className="p-6 grid md:grid-cols-2 gap-6">
+                            <div className="space-y-4">
+                                <h4 className="font-bold text-orange-800">The Challenge</h4>
+                                <p className="text-sm text-orange-900">
+                                    Developers paste error messages verbatim. Standard tokenizers destroy meaning by
+                                    removing or splitting special characters that are semantically critical.
+                                </p>
+                                <div className="bg-zinc-900 rounded-lg p-4 font-mono text-sm overflow-x-auto">
+                                    <div className="text-red-400">"TypeError: Cannot read property 'map' of undefined"</div>
+                                    <div className="mt-2 text-zinc-500">Standard tokenizer output:</div>
+                                    <div className="text-zinc-400 text-xs">["typeerror", "cannot", "read", "property", "map", "undefined"]</div>
+                                    <div className="mt-2 text-zinc-500">Required output:</div>
+                                    <div className="text-green-400 text-xs">["TypeError:", "Cannot read property", "'map'", "of undefined"]</div>
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <h4 className="font-bold text-orange-800">Critical Distinctions</h4>
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-3 bg-white p-3 rounded-lg border border-orange-200">
+                                        <span className="text-2xl text-orange-600">≠</span>
+                                        <div>
+                                            <div className="font-mono text-sm"><span className="text-blue-600">useEffect</span> vs <span className="text-red-600">use effect</span></div>
+                                            <div className="text-xs text-orange-700">Case and spacing matter</div>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3 bg-white p-3 rounded-lg border border-orange-200">
+                                        <span className="text-2xl text-orange-600">≠</span>
+                                        <div>
+                                            <div className="font-mono text-sm"><span className="text-blue-600">===</span> vs <span className="text-red-600">==</span></div>
+                                            <div className="text-xs text-orange-700">Operators are semantic, not noise</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="bg-orange-100 border border-orange-300 p-3 rounded-lg text-xs text-orange-800">
+                                    <strong>Insight:</strong> Custom tokenizers must preserve [], (), {'{}'}, ===, and other programming symbols.
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     {/* Netflix */}
-                    <div className="border border-border rounded-xl p-5">
-                        <div className="flex items-center gap-2 mb-3">
-                            <span className="px-2 py-0.5 bg-red-500/20 text-red-500 rounded text-xs font-bold">NETFLIX</span>
-                            <span className="font-bold text-sm">The "I don't know" Problem</span>
+                    <div className="rounded-xl border-2 border-red-500 bg-red-50 overflow-hidden">
+                        <div className="bg-red-600 text-white px-6 py-3 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <User className="w-5 h-5" />
+                                <span className="font-bold">NETFLIX</span>
+                                <span className="text-red-100 text-sm">Content Discovery</span>
+                            </div>
+                            <span className="text-xs bg-red-700 px-2 py-1 rounded">60% don't search</span>
                         </div>
-                        <p className="text-sm text-muted-foreground mb-3">
-                            60% of users don't search, they browse. Those who do search use vague queries.
-                        </p>
-                        <ul className="text-xs space-y-2 bg-secondary/30 p-3 rounded">
-                            <li className="flex justify-between">
-                                <span>"that show about chess"</span>
-                                <span className="font-mono text-muted-foreground">Context</span>
-                            </li>
-                            <li className="flex justify-between">
-                                <span>"sad movies"</span>
-                                <span className="font-mono text-muted-foreground">Mood</span>
-                            </li>
-                            <li className="text-muted-foreground italic mt-2">
-                                Heavy reliance on personalization to fill gaps.
-                            </li>
-                        </ul>
+                        <div className="p-6 grid md:grid-cols-2 gap-6">
+                            <div className="space-y-4">
+                                <h4 className="font-bold text-red-800">The Challenge</h4>
+                                <p className="text-sm text-red-900">
+                                    Most users browse rather than search. When they do search, queries are vague and
+                                    rely heavily on implicit context: mood, time, who they're watching with.
+                                </p>
+                                <div className="bg-zinc-900 rounded-lg p-4 font-mono text-sm overflow-x-auto space-y-2">
+                                    <div className="flex gap-3">
+                                        <span className="text-zinc-500 w-16">Query:</span>
+                                        <span className="text-amber-400">"that show about chess"</span>
+                                    </div>
+                                    <div className="flex gap-3">
+                                        <span className="text-zinc-500 w-16">Intent:</span>
+                                        <span className="text-green-400">The Queen's Gambit</span>
+                                    </div>
+                                    <div className="border-t border-zinc-700 pt-2 mt-2"></div>
+                                    <div className="flex gap-3">
+                                        <span className="text-zinc-500 w-16">Query:</span>
+                                        <span className="text-amber-400">"sad movies"</span>
+                                    </div>
+                                    <div className="flex gap-3">
+                                        <span className="text-zinc-500 w-16">Signal:</span>
+                                        <span className="text-blue-400">Mood: melancholy, genre: drama</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="space-y-4">
+                                <h4 className="font-bold text-red-800">Personalization Dependency</h4>
+                                <div className="bg-white p-4 rounded-lg border border-red-200 space-y-3">
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-red-800">Query completeness</span>
+                                        <span className="text-red-600 font-bold">~30%</span>
+                                    </div>
+                                    <div className="w-full bg-red-200 rounded-full h-3">
+                                        <div className="bg-red-500 h-3 rounded-full" style={{ width: '30%' }}></div>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-red-800">User profile fills gaps</span>
+                                        <span className="text-green-600 font-bold">+70%</span>
+                                    </div>
+                                    <div className="w-full bg-green-200 rounded-full h-3">
+                                        <div className="bg-green-500 h-3 rounded-full" style={{ width: '70%' }}></div>
+                                    </div>
+                                </div>
+                                <div className="bg-red-100 border border-red-300 p-3 rounded-lg text-xs text-red-800">
+                                    <strong>Insight:</strong> Query understanding must be deeply integrated with personalization user history is as important as query text.
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -412,6 +527,11 @@ export default function DefinitionPage() {
             {/* Query Richness Spectrum */}
             <section className="space-y-6">
                 <h2 className="text-2xl font-semibold">Query Richness Spectrum</h2>
+                <p className="text-muted-foreground">
+                    Not all queries are created equal in terms of the information they carry. Sparse queries like "shoes" are
+                    extremely common but provide almost no filtering signal. Rich queries with brand, size, and color give you
+                    everything needed for an exact match. Your system must handle the entire spectrum gracefully.
+                </p>
 
                 <div className="relative">
                     {/* Spectrum bar */}
@@ -446,6 +566,11 @@ export default function DefinitionPage() {
                 <h2 className="text-2xl font-semibold flex items-center gap-2">
                     <AlertCircle className="w-6 h-6 text-red-500" /> Failure Case Studies
                 </h2>
+                <p className="text-muted-foreground">
+                    Query understanding failures are often subtle but devastating to user experience. These three common
+                    failure modes show how even sophisticated systems can misinterpret user intent. Each represents a
+                    fundamental challenge that requires specialized handling.
+                </p>
 
                 <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-6">
                     <div className="grid gap-8 md:grid-cols-3">
@@ -570,6 +695,6 @@ export default function DefinitionPage() {
                     Next: Types of Queries <ArrowRight className="w-4 h-4" />
                 </Link>
             </div>
-        </div >
+        </div>
     );
 }
