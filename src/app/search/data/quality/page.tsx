@@ -1,5 +1,13 @@
 import { AlertTriangle, CheckCircle2, Database, DollarSign, ShieldAlert, Zap, ArrowRight, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
+
+const takeaways = [
+    { title: "It's a Data Problem", description: "80% of search quality failures are data issues, not algorithm issues. Ranking models cannot fix broken data." },
+    { title: "The Five Failures", description: "Field Contamination, Schema Drift, Implicit Nulls, Semantic Duplication, and Join Loss are the most common root causes." },
+    { title: "High ROI Fixes", description: "Simple ingestion gates (like rejecting null prices) can save millions in lost revenue with minimal engineering effort." },
+    { title: "Automate Quality", description: "Build automated quality gates in your ingestion pipeline. Reject bad data before it enters the index." }
+];
 
 export default function QualityPage() {
     return (
@@ -464,29 +472,7 @@ export default function QualityPage() {
             </section>
 
             {/* Key Takeaways */}
-            <section className="bg-green-100 border-2 border-green-500 p-6 rounded-xl">
-                <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-green-800">
-                    <CheckCircle2 className="w-5 h-5" /> Key Takeaways
-                </h2>
-                <ul className="space-y-2 text-sm text-green-900">
-                    <li className="flex items-start gap-2">
-                        <Zap className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>80% of search quality failures are data problems, not algorithm problems.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <Zap className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>The five failures: Field Contamination, Schema Drift, Implicit Nulls, Semantic Duplication, Join Loss.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <Zap className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>A 2-hour fix to reject null prices can save $164M/year.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <Zap className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>Build automated quality gates in your ingestion pipeline before investing in ranking models.</span>
-                    </li>
-                </ul>
-            </section>
+            <KeyTakeaways takeaways={takeaways} />
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

@@ -3,6 +3,7 @@
 import { RefreshCw, Plus, Minus, ArrowRight, ArrowLeft, Zap, AlertTriangle, TrendingUp, Code2 } from "lucide-react";
 import Link from "next/link";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
 
 const precisionRecallData = [
     { expansion: "None", recall: 20, precision: 95 },
@@ -10,6 +11,15 @@ const precisionRecallData = [
     { expansion: "Semantic", recall: 80, precision: 65 },
     { expansion: "Broad", recall: 95, precision: 30 },
 ];
+
+const takeaways = [
+    { title: "Trade-off", description: "Expansion increases recall (finding more) but hurts precision (relevance)." },
+    { title: "Structured Rewriting", description: "Convert unstructured text to structured filters (e.g., \"under $100\" -> price < 100)." },
+    { title: "Constraints", description: "Never expand named entities (Brands) or negations. It destroys trust." },
+    { title: "Adaptive Strategy", description: "Expand aggressively only when you have low result counts (Zero Results)." }
+];
+
+
 
 export default function RewritingPage() {
     return (
@@ -351,16 +361,8 @@ export default function RewritingPage() {
             </section>
 
             {/* Key Takeaways */}
-            <section className="bg-primary/5 p-6 rounded-xl border border-primary/20">
-                <h2 className="text-lg font-semibold mb-4">Key Takeaways</h2>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li>• <strong>Expansion increases recall</strong> but can hurt precision</li>
-                    <li>• <strong>Rewriting converts to structured</strong>  better for filtering</li>
-                    <li>• <strong>Don't expand brands, constraints, negations</strong></li>
-                    <li>• <strong>Tiered approach</strong>  expand more as results decrease</li>
-                    <li>• <strong>Learn from clicks</strong>  best synonyms from user behavior</li>
-                </ul>
-            </section>
+            <KeyTakeaways takeaways={takeaways} />
+
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

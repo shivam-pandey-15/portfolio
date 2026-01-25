@@ -3,12 +3,20 @@
 import { Search, Layers, Target, User, ArrowRight, ArrowLeft, AlertCircle, CheckCircle2, BarChart3, Code2, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Legend } from "recharts";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
 
 const informationLossData = [
     { dimension: "User Intent", know: 100, color: "#22c55e" },
     { dimension: "Spoken Query", know: 80, color: "#84cc16" },
     { dimension: "Typed Query", know: 40, color: "#eab308" },
     { dimension: "System Match", know: 25, color: "#ef4444" },
+];
+
+const takeaways = [
+    { title: "Compressed Intent", description: "A query is compressed intent, not just text." },
+    { title: "Context Matters", description: "Context (who, where, when) is just as important as content." },
+    { title: "Ambiguity", description: "Most queries are ambiguous. The system must natively handle this." },
+    { title: "Goal", description: "The goal is intent satisfaction, not just keyword matching." }
 ];
 
 export default function DefinitionPage() {
@@ -662,29 +670,8 @@ export default function DefinitionPage() {
             </section>
 
             {/* Key Takeaways */}
-            <section className="bg-primary/5 p-6 rounded-xl border border-primary/20">
-                <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-green-500" /> Key Takeaways
-                </h2>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li className="flex items-start gap-2">
-                        <span className="text-primary font-bold">1.</span>
-                        <span>A query is <strong>compressed intent</strong>, not just text</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <span className="text-primary font-bold">2.</span>
-                        <span><strong>Context is as important as content</strong> (who, where, when)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <span className="text-primary font-bold">3.</span>
-                        <span><strong>Most queries are ambiguous</strong>  the system must handle this</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <span className="text-primary font-bold">4.</span>
-                        <span>The goal is <strong>intent satisfaction</strong>, not keyword matching</span>
-                    </li>
-                </ul>
-            </section>
+            <KeyTakeaways takeaways={takeaways} />
+
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

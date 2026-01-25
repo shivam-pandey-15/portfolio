@@ -1,5 +1,13 @@
 import { Search, Sparkles, Compass, ArrowRight, ArrowLeft, CheckCircle, XCircle } from "lucide-react";
 import Link from "next/link";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
+
+const takeaways = [
+    { title: "Search", description: "High intent, precision-focused (User: \"I want X\")" },
+    { title: "Recommendation", description: "Low intent, engagement-focused (System: \"You might like Y\")" },
+    { title: "Discovery", description: "Medium intent, exploration-focused (User: \"Show me category Z\")" },
+    { title: "Hybrid Reality", description: "The best products (e.g., Netflix, Amazon) combine all three seamlessly." }
+];
 
 export default function ComparisonPage() {
     return (
@@ -215,27 +223,8 @@ export default function ComparisonPage() {
             </section>
 
             {/* Key Takeaways */}
-            <section className="bg-primary/5 p-6 rounded-xl border border-primary/20">
-                <h2 className="text-lg font-semil-bold mb-4">Key Takeaways</h2>
-                <div className="grid gap-2 md:grid-cols-2">
-                    <div className="flex items-start gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                        <span className="text-sm text-muted-foreground">Search = High intent, precision-focused</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                        <span className="text-sm text-muted-foreground">Recs = Low intent, engagement-focused</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                        <span className="text-sm text-muted-foreground">Discovery = Medium intent, exploration-focused</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                        <span className="text-sm text-muted-foreground">Best products combine all three</span>
-                    </div>
-                </div>
-            </section>
+            <KeyTakeaways takeaways={takeaways} />
+
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

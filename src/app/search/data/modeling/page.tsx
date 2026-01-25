@@ -2,6 +2,14 @@
 
 import { ArrowRight, ArrowLeft, ArrowDown, Database, Divide, Copy, AlertTriangle, CheckCircle2, XCircle, LayoutGrid, Network, Layers, FileJson, Scale } from "lucide-react";
 import Link from "next/link";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
+
+const takeaways = [
+    { title: "Model for the Result Card", description: "The 'Document' is what you show the user, not necessarily a database row. Often, 10 DB rows = 1 Search Document." },
+    { title: "The Denormalization Tax", description: "Search indices are 5x larger than the source DB due to inverted indices, doc values, and replicas. Plan storage accordingly." },
+    { title: "Choose Your Granularity", description: "Use Field Collapsing for 'SKU-level precision with Product-level display'. Avoid Nested Objects for high-churn data." },
+    { title: "Updates are Expensive", description: "In Lucene, every update is a Delete + Insert. Partial updates are a lie. Optimize for write throughput." }
+];
 
 export default function Modeling() {
     return (
@@ -677,166 +685,144 @@ export default function Modeling() {
 
             {/* 6. Production Stories & Industry Playbook */}
             <section className="space-y-8">
-        <h2 className="text-3xl font-bold flex items-center gap-3">
-            <AlertTriangle className="w-8 h-8" /> Real Production Failure Stories
-        </h2>
-        <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-zinc-50 border border-zinc-200 p-4 rounded-lg">
-                <div className="font-bold text-sm text-zinc-900 mb-2">1. The Variant Explosion</div>
-                <p className="text-xs text-zinc-600 mb-2">
-                    An e-commerce site indexed every SKU (Option B) without collapsing.
+                <h2 className="text-3xl font-bold flex items-center gap-3">
+                    <AlertTriangle className="w-8 h-8" /> Real Production Failure Stories
+                </h2>
+                <div className="grid md:grid-cols-3 gap-6">
+                    <div className="bg-zinc-50 border border-zinc-200 p-4 rounded-lg">
+                        <div className="font-bold text-sm text-zinc-900 mb-2">1. The Variant Explosion</div>
+                        <p className="text-xs text-zinc-600 mb-2">
+                            An e-commerce site indexed every SKU (Option B) without collapsing.
+                        </p>
+                        <div className="bg-red-100 text-red-800 text-[10px] p-2 rounded font-mono">
+                            Result: "Nike Shirt" returned 400 results (All Nike variants), burying Adidas completely. Relevance score dropped 80%.
+                        </div>
+                    </div>
+                    <div className="bg-zinc-50 border border-zinc-200 p-4 rounded-lg">
+                        <div className="font-bold text-sm text-zinc-900 mb-2">2. The Nested Throughput Death</div>
+                        <p className="text-xs text-zinc-600 mb-2">
+                            A log platform used Nested Objects for 'tags' on high-velocity logs.
+                        </p>
+                        <div className="bg-red-100 text-red-800 text-[10px] p-2 rounded font-mono">
+                            Result: Indexing rate dropped 90% because every log update forced Lucene to rewrite the entire block of nested segments.
+                        </div>
+                    </div>
+                    <div className="bg-zinc-50 border border-zinc-200 p-4 rounded-lg">
+                        <div className="font-bold text-sm text-zinc-900 mb-2">3. The Parent-Child Latency</div>
+                        <p className="text-xs text-zinc-600 mb-2">
+                            A job board used Parent-Child for Company → Jobs.
+                        </p>
+                        <div className="bg-red-100 text-red-800 text-[10px] p-2 rounded font-mono">
+                            Result: At 50M docs, queries took 800ms (p99) due to global ordinal loading. They had to switch to Denormalized Flat docs.
+                        </div>
+                    </div>
+                </div>
+
+                {/* Industry Playbook */}
+                <div className="bg-zinc-900 text-zinc-100 rounded-xl p-6">
+                    <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                        <Layers className="w-5 h-5 text-zinc-400" /> Industry Modeling Playbook
+                    </h3>
+                    <div className="grid md:grid-cols-3 gap-6 text-sm">
+                        <div>
+                            <div className="font-bold text-blue-400 mb-2">1. E-Commerce (Amazon/Shopify)</div>
+                            <ul className="space-y-1 text-zinc-400 text-xs">
+                                <li>• <strong>Model:</strong> Option C (SKU Docs + Collapse)</li>
+                                <li>• <strong>Why:</strong> Need precise filtering (Size/Color) but grouped display.</li>
+                                <li>• <strong>Trade-off:</strong> Higher query latency, better UX.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div className="font-bold text-green-400 mb-2">2. Content/Media (Netflix/Spotify)</div>
+                            <ul className="space-y-1 text-zinc-400 text-xs">
+                                <li>• <strong>Model:</strong> Option A (Flat Product/Show)</li>
+                                <li>• <strong>Why:</strong> "Variations" (Episodes) are rarely searched independently by attributes.</li>
+                                <li>• <strong>Trade-off:</strong> Fast queries, duplicates impossible.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div className="font-bold text-purple-400 mb-2">3. SaaS/B2B (Salesforce/Jira)</div>
+                            <ul className="space-y-1 text-zinc-400 text-xs">
+                                <li>• <strong>Model:</strong> Parent-Child (Account → Ticket)</li>
+                                <li>• <strong>Why:</strong> Access controls (Parent) apply to all tickets. Tickets change constantly.</li>
+                                <li>• <strong>Trade-off:</strong> Slow queries, instant security updates.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 5. Decision Framework */}
+            <section className="space-y-6">
+                <h2 className="text-3xl font-bold flex items-center gap-3">
+                    <LayoutGrid className="w-8 h-8" /> Decision Framework
+                </h2>
+                <p className="text-foreground leading-relaxed">
+                    How do you choose? Answer these four questions to pick the correct model.
                 </p>
-                <div className="bg-red-100 text-red-800 text-[10px] p-2 rounded font-mono">
-                    Result: "Nike Shirt" returned 400 results (All Nike variants), burying Adidas completely. Relevance score dropped 80%.
-                </div>
-            </div>
-            <div className="bg-zinc-50 border border-zinc-200 p-4 rounded-lg">
-                <div className="font-bold text-sm text-zinc-900 mb-2">2. The Nested Throughput Death</div>
-                <p className="text-xs text-zinc-600 mb-2">
-                    A log platform used Nested Objects for 'tags' on high-velocity logs.
-                </p>
-                <div className="bg-red-100 text-red-800 text-[10px] p-2 rounded font-mono">
-                    Result: Indexing rate dropped 90% because every log update forced Lucene to rewrite the entire block of nested segments.
-                </div>
-            </div>
-            <div className="bg-zinc-50 border border-zinc-200 p-4 rounded-lg">
-                <div className="font-bold text-sm text-zinc-900 mb-2">3. The Parent-Child Latency</div>
-                <p className="text-xs text-zinc-600 mb-2">
-                    A job board used Parent-Child for Company → Jobs.
-                </p>
-                <div className="bg-red-100 text-red-800 text-[10px] p-2 rounded font-mono">
-                    Result: At 50M docs, queries took 800ms (p99) due to global ordinal loading. They had to switch to Denormalized Flat docs.
-                </div>
-            </div>
-        </div>
 
-        {/* Industry Playbook */}
-        <div className="bg-zinc-900 text-zinc-100 rounded-xl p-6">
-            <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                <Layers className="w-5 h-5 text-zinc-400" /> Industry Modeling Playbook
-            </h3>
-            <div className="grid md:grid-cols-3 gap-6 text-sm">
-                <div>
-                    <div className="font-bold text-blue-400 mb-2">1. E-Commerce (Amazon/Shopify)</div>
-                    <ul className="space-y-1 text-zinc-400 text-xs">
-                        <li>• <strong>Model:</strong> Option C (SKU Docs + Collapse)</li>
-                        <li>• <strong>Why:</strong> Need precise filtering (Size/Color) but grouped display.</li>
-                        <li>• <strong>Trade-off:</strong> Higher query latency, better UX.</li>
-                    </ul>
+                <div className="overflow-x-auto rounded-xl border-2 border-border">
+                    <table className="w-full text-sm">
+                        <thead>
+                            <tr className="bg-muted">
+                                <th className="text-left px-4 py-3 font-bold text-foreground">Question</th>
+                                <th className="text-left px-4 py-3 font-bold text-foreground">If YES...</th>
+                                <th className="text-left px-4 py-3 font-bold text-foreground">If NO...</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border bg-white">
+                            <tr>
+                                <td className="px-4 py-4 font-medium">1. Are there many variations of the same item?</td>
+                                <td className="px-4 py-4 text-zinc-600">Consider <strong>SKU + Collapsing</strong></td>
+                                <td className="px-4 py-4 text-zinc-600">Model as <strong>Product</strong></td>
+                            </tr>
+                            <tr>
+                                <td className="px-4 py-4 font-medium">2. Do filters need strictly correlated attributes? <br /><span className="text-xs text-muted-foreground">(e.g. Red MUST be Size L)</span></td>
+                                <td className="px-4 py-4 text-zinc-600">Need <strong>Nested</strong> or <strong>Parent-Child</strong></td>
+                                <td className="px-4 py-4 text-zinc-600"><strong>Flat</strong> arrays are faster</td>
+                            </tr>
+                            <tr>
+                                <td className="px-4 py-4 font-medium">3. Is your update rate extremely high? <br /><span className="text-xs text-muted-foreground">(e.g. Real-time inventory)</span></td>
+                                <td className="px-4 py-4 text-zinc-600"><strong>Parent-Child</strong> (Update child only)</td>
+                                <td className="px-4 py-4 text-zinc-600"><strong>Nested</strong> (Updates are expensive)</td>
+                            </tr>
+                            <tr>
+                                <td className="px-4 py-4 font-medium">4. Has &gt; 1000 variants per product?</td>
+                                <td className="px-4 py-4 text-zinc-600"><strong>Parent-Child</strong> or Split Indices</td>
+                                <td className="px-4 py-4 text-zinc-600"><strong>Nested</strong> fits in a block</td>
+                            </tr>
+                            <tr>
+                                <td className="px-4 py-4 font-medium">5. Need stable pagination across pages?</td>
+                                <td className="px-4 py-4 text-zinc-600"><strong>Avoid Collapse</strong> (Use Flat/Nested)</td>
+                                <td className="px-4 py-4 text-zinc-600"><strong>Collapse</strong> is acceptable (First N High Confidence)</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div>
-                    <div className="font-bold text-green-400 mb-2">2. Content/Media (Netflix/Spotify)</div>
-                    <ul className="space-y-1 text-zinc-400 text-xs">
-                        <li>• <strong>Model:</strong> Option A (Flat Product/Show)</li>
-                        <li>• <strong>Why:</strong> "Variations" (Episodes) are rarely searched independently by attributes.</li>
-                        <li>• <strong>Trade-off:</strong> Fast queries, duplicates impossible.</li>
-                    </ul>
-                </div>
-                <div>
-                    <div className="font-bold text-purple-400 mb-2">3. SaaS/B2B (Salesforce/Jira)</div>
-                    <ul className="space-y-1 text-zinc-400 text-xs">
-                        <li>• <strong>Model:</strong> Parent-Child (Account → Ticket)</li>
-                        <li>• <strong>Why:</strong> Access controls (Parent) apply to all tickets. Tickets change constantly.</li>
-                        <li>• <strong>Trade-off:</strong> Slow queries, instant security updates.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
+            </section >
 
-    {/* 5. Decision Framework */ }
-    <section className="space-y-6">
-        <h2 className="text-3xl font-bold flex items-center gap-3">
-            <LayoutGrid className="w-8 h-8" /> Decision Framework
-        </h2>
-        <p className="text-foreground leading-relaxed">
-            How do you choose? Answer these four questions to pick the correct model.
-        </p>
+            {/* Key Takeaways */}
+            <KeyTakeaways takeaways={takeaways} />
 
-        <div className="overflow-x-auto rounded-xl border-2 border-border">
-            <table className="w-full text-sm">
-                <thead>
-                    <tr className="bg-muted">
-                        <th className="text-left px-4 py-3 font-bold text-foreground">Question</th>
-                        <th className="text-left px-4 py-3 font-bold text-foreground">If YES...</th>
-                        <th className="text-left px-4 py-3 font-bold text-foreground">If NO...</th>
-                    </tr>
-                </thead>
-                <tbody className="divide-y divide-border bg-white">
-                    <tr>
-                        <td className="px-4 py-4 font-medium">1. Are there many variations of the same item?</td>
-                        <td className="px-4 py-4 text-zinc-600">Consider <strong>SKU + Collapsing</strong></td>
-                        <td className="px-4 py-4 text-zinc-600">Model as <strong>Product</strong></td>
-                    </tr>
-                    <tr>
-                        <td className="px-4 py-4 font-medium">2. Do filters need strictly correlated attributes? <br /><span className="text-xs text-muted-foreground">(e.g. Red MUST be Size L)</span></td>
-                        <td className="px-4 py-4 text-zinc-600">Need <strong>Nested</strong> or <strong>Parent-Child</strong></td>
-                        <td className="px-4 py-4 text-zinc-600"><strong>Flat</strong> arrays are faster</td>
-                    </tr>
-                    <tr>
-                        <td className="px-4 py-4 font-medium">3. Is your update rate extremely high? <br /><span className="text-xs text-muted-foreground">(e.g. Real-time inventory)</span></td>
-                        <td className="px-4 py-4 text-zinc-600"><strong>Parent-Child</strong> (Update child only)</td>
-                        <td className="px-4 py-4 text-zinc-600"><strong>Nested</strong> (Updates are expensive)</td>
-                    </tr>
-                    <tr>
-                        <td className="px-4 py-4 font-medium">4. Has &gt; 1000 variants per product?</td>
-                        <td className="px-4 py-4 text-zinc-600"><strong>Parent-Child</strong> or Split Indices</td>
-                        <td className="px-4 py-4 text-zinc-600"><strong>Nested</strong> fits in a block</td>
-                    </tr>
-                    <tr>
-                        <td className="px-4 py-4 font-medium">5. Need stable pagination across pages?</td>
-                        <td className="px-4 py-4 text-zinc-600"><strong>Avoid Collapse</strong> (Use Flat/Nested)</td>
-                        <td className="px-4 py-4 text-zinc-600"><strong>Collapse</strong> is acceptable (First N High Confidence)</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section >
-
-    {/* Key Takeaways */ }
-    <section className="bg-green-100 border-2 border-green-500 p-6 rounded-xl" >
-        <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-green-800">
-            <CheckCircle2 className="w-5 h-5" /> Key Takeaways
-        </h2>
-        <ul className="space-y-2 text-sm text-green-900">
-            <li className="flex items-start gap-2">
-                <FileJson className="w-4 h-4 shrink-0 mt-0.5" />
-                <span><strong>Golden Rule:</strong> Model exactly what the user sees on the result card.</span>
-            </li>
-            <li className="flex items-start gap-2">
-                <Layers className="w-4 h-4 shrink-0 mt-0.5" />
-                <span><strong>SKU vs Product:</strong> Use Field Collapsing to get the best of both worlds (SKU precision, Product display).</span>
-            </li>
-            <li className="flex items-start gap-2">
-                <Network className="w-4 h-4 shrink-0 mt-0.5" />
-                <span><strong>Relationships:</strong> Avoid joins. Use Nested for correctness, Parent-Child only for high-churn updates.</span>
-            </li>
-            <li className="flex items-start gap-2">
-                <Database className="w-4 h-4 shrink-0 mt-0.5" />
-                <span><strong>Expect Growth:</strong> Your index is 5-6x the size of your raw data. Plan capacity accordingly.</span>
-            </li>
-        </ul>
-    </section>
-
-    {/* Mental Model Summary */ }
+            {/* Mental Model Summary */}
             <section className="bg-zinc-900 border-2 border-zinc-700 p-8 rounded-xl text-center">
                 <h2 className="text-2xl font-bold mb-6 text-white">Mental Model Summary: The 3 Axes</h2>
                 <div className="grid md:grid-cols-3 gap-8">
-                     <div className="p-4 bg-zinc-800/50 rounded-lg">
-                         <div className="text-4xl mb-3">🎯</div>
-                         <h3 className="text-blue-400 font-bold mb-2">Relevance Correctness</h3>
-                         <p className="text-sm text-zinc-400">Does "Red Small" actually match a Red Small item? (Nested/SKU wins here)</p>
-                     </div>
-                     <div className="p-4 bg-zinc-800/50 rounded-lg">
-                         <div className="text-4xl mb-3">⚡</div>
-                         <h3 className="text-green-400 font-bold mb-2">Query Latency</h3>
-                         <p className="text-sm text-zinc-400">How fast does the search page load? (Flat wins here)</p>
-                     </div>
-                     <div className="p-4 bg-zinc-800/50 rounded-lg">
-                         <div className="text-4xl mb-3">🔄</div>
-                         <h3 className="text-purple-400 font-bold mb-2">Update Cost</h3>
-                         <p className="text-sm text-zinc-400">How fast can inventory sync? (Parent-Child wins here)</p>
-                     </div>
+                    <div className="p-4 bg-zinc-800/50 rounded-lg">
+                        <div className="text-4xl mb-3">🎯</div>
+                        <h3 className="text-blue-400 font-bold mb-2">Relevance Correctness</h3>
+                        <p className="text-sm text-zinc-400">Does "Red Small" actually match a Red Small item? (Nested/SKU wins here)</p>
+                    </div>
+                    <div className="p-4 bg-zinc-800/50 rounded-lg">
+                        <div className="text-4xl mb-3">⚡</div>
+                        <h3 className="text-green-400 font-bold mb-2">Query Latency</h3>
+                        <p className="text-sm text-zinc-400">How fast does the search page load? (Flat wins here)</p>
+                    </div>
+                    <div className="p-4 bg-zinc-800/50 rounded-lg">
+                        <div className="text-4xl mb-3">🔄</div>
+                        <h3 className="text-purple-400 font-bold mb-2">Update Cost</h3>
+                        <p className="text-sm text-zinc-400">How fast can inventory sync? (Parent-Child wins here)</p>
+                    </div>
                 </div>
                 <div className="mt-8 text-zinc-500 font-mono text-sm border-t border-zinc-800 pt-6">
                     "You can only pick 2. Choose wisely."
@@ -844,12 +830,12 @@ export default function Modeling() {
             </section>
 
             <div className="flex justify-between pt-8 border-t border-border">
-            <Link href="/search/data/types" className="text-sm font-medium text-muted-foreground hover:text-primary flex items-center gap-2">
-                <ArrowLeft className="w-4 h-4" /> 4.2 Data Types
-            </Link>
-            <Link href="/search/data/text-vs-structured" className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90">
-                Next: Text vs Structured <ArrowRight className="w-4 h-4" />
-            </Link>
+                <Link href="/search/data/types" className="text-sm font-medium text-muted-foreground hover:text-primary flex items-center gap-2">
+                    <ArrowLeft className="w-4 h-4" /> 4.2 Data Types
+                </Link>
+                <Link href="/search/data/text-vs-structured" className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90">
+                    Next: Text vs Structured <ArrowRight className="w-4 h-4" />
+                </Link>
             </div>
         </div >
     );

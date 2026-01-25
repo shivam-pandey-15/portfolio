@@ -3,6 +3,7 @@
 import { PieChart as PieIcon, Compass, ShoppingCart, Info, MapPin, ArrowRight, ArrowLeft, Lightbulb, Code2, BarChart3 } from "lucide-react";
 import Link from "next/link";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
 
 const intentData = [
     { name: "Informational", value: 60, color: "#3b82f6" },
@@ -10,6 +11,15 @@ const intentData = [
     { name: "Transactional", value: 10, color: "#f59e0b" },
     { name: "Commercial Inv.", value: 10, color: "#8b5cf6" },
 ];
+
+const takeaways = [
+    { title: "Classify First", description: "You cannot rank results until you know the query type." },
+    { title: "Informational", description: "Goal: Answer. Metric: Time to Result. UI: Snippets." },
+    { title: "Transactional", description: "Goal: Purchase. Metric: Conversion. UI: Product Grids." },
+    { title: "Navigational", description: "Goal: Navigation. Metric: CTR@1. UI: Sitelinks." }
+];
+
+
 
 export default function TypesPage() {
     return (
@@ -349,6 +359,9 @@ export default function TypesPage() {
                     </div>
                 </div>
             </section>
+
+            {/* Key Takeaways */}
+            <KeyTakeaways takeaways={takeaways} />
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

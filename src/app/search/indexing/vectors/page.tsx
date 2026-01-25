@@ -1,5 +1,14 @@
 import { ArrowRight, Network, Layers, Search, CheckCircle2, Cpu, Zap, ArrowDown } from "lucide-react";
 import Link from "next/link";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
+
+const takeaways = [
+    { title: "Meaning encoding", description: "Vectors encode semantic meaning. Similar text produces nearby vectors in high-dimensional space." },
+    { title: "HNSW", description: "Uses hierarchical layers to navigate from coarse to fine, achieving O(log N) search." },
+    { title: "Tuning", description: "Tune M (recall) and ef (speed) to balance memory, build time, and search latency." },
+    { title: "Hybrid Search", description: "Combininig BM25 (keyword precision) and Vectors (semantic recall) usually yields the best results." },
+    { title: "Quantization", description: "Use int8 quantization to reduce memory 4x with minimal quality loss." }
+];
 
 export default function Vectors() {
     return (
@@ -585,33 +594,8 @@ export default function Vectors() {
             </section>
 
             {/* Key Takeaways */}
-            <section className="bg-green-100 border-2 border-green-500 p-6 rounded-xl">
-                <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-green-800">
-                    <CheckCircle2 className="w-5 h-5" /> Key Takeaways
-                </h2>
-                <ul className="space-y-2 text-sm text-green-900">
-                    <li className="flex items-start gap-2">
-                        <Network className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Vectors encode meaning</strong>  similar text produces nearby vectors in high-dimensional space.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <Layers className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>HNSW uses hierarchical layers</strong> to navigate from coarse to fine, achieving O(log N) search.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <Cpu className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Tune M and ef</strong> to balance memory, build time, and recall.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <Zap className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Hybrid search is usually best</strong>  combine BM25 + vectors for best results.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <Cpu className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Use int8 quantization</strong> to reduce memory 4x with minimal quality loss.</span>
-                    </li>
-                </ul>
-            </section>
+            <KeyTakeaways takeaways={takeaways} />
+
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

@@ -1,5 +1,12 @@
 import { Database, Search, ArrowRight, ArrowDown, HardDrive, AlertTriangle, CheckCircle2, Layers, Zap } from "lucide-react";
 import Link from "next/link";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
+
+const takeaways = [
+    { title: "Trade-offs", description: "An index trades write performance and storage for O(1) read performance on text." },
+    { title: "Hierarchy", description: "The hierarchy is Index → Shards → Replicas → Segments. Shard count cannot change." },
+    { title: "Capacity Planning", description: "Target 20-50GB per shard. Plan capacity before you create the index." }
+];
 
 export default function Definition() {
     return (
@@ -615,25 +622,8 @@ export default function Definition() {
             </section>
 
             {/* Key Takeaways */}
-            <section className="bg-green-100 border-2 border-green-500 p-6 rounded-xl">
-                <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-green-800">
-                    <CheckCircle2 className="w-5 h-5" /> Key Takeaways
-                </h2>
-                <ul className="space-y-2 text-sm text-green-900">
-                    <li className="flex items-start gap-2">
-                        <Zap className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>An index trades write performance and storage for O(1) read performance on text.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <Layers className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>The hierarchy is Index → Shards → Replicas → Segments. Shard count cannot change.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <HardDrive className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>Target 20-50GB per shard. Plan capacity before you create the index.</span>
-                    </li>
-                </ul>
-            </section>
+            <KeyTakeaways takeaways={takeaways} />
+
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

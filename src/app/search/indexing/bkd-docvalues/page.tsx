@@ -1,5 +1,14 @@
 import { ArrowRight, Binary, Map as MapIcon, Database, AlertTriangle, CheckCircle2, MapPin, Table2 } from "lucide-react";
 import Link from "next/link";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
+
+const takeaways = [
+    { title: "BKD Trees", description: "Enable O(log N) range queries on numeric, date, and geo fields." },
+    { title: "DocValues", description: "Store data column-wise to enable fast sorting and aggregations." },
+    { title: "Precision", description: "Use 'scaled_float' for money to avoid floating-point precision issues." },
+    { title: "Global Ordinals", description: "High-cardinality aggregations on text fields consume massive heap memory." },
+    { title: "Space Optimization", description: "Disable DocValues on fields you never sort or aggregate to save 30-50% storage." }
+];
 
 export default function BKDDocValues() {
     return (
@@ -818,33 +827,8 @@ export default function BKDDocValues() {
             </section>
 
             {/* Key Takeaways */}
-            <section className="bg-green-100 border-2 border-green-500 p-6 rounded-xl">
-                <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-green-800">
-                    <CheckCircle2 className="w-5 h-5" /> Key Takeaways
-                </h2>
-                <ul className="space-y-2 text-sm text-green-900">
-                    <li className="flex items-start gap-2">
-                        <MapIcon className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>BKD trees</strong> enable O(log N) range queries on numeric, date, and geo fields.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <Table2 className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>DocValues</strong> store data column-wise for fast sorting and aggregations.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <Database className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>Use <strong>scaled_float for money</strong> to avoid precision issues.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>Watch for <strong>high-cardinality aggregations</strong>  they consume heap memory via global ordinals.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <MapPin className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Disable DocValues</strong> on fields you never sort/aggregate to save 30-50% storage.</span>
-                    </li>
-                </ul>
-            </section>
+            <KeyTakeaways takeaways={takeaways} />
+
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

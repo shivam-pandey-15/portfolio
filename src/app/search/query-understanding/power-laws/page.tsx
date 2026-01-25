@@ -3,12 +3,22 @@
 import { BarChart3, TrendingUp, DollarSign, Settings, ArrowRight, ArrowLeft, Code2 } from "lucide-react";
 import Link from "next/link";
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
 
 const distributionData = [
     { name: "Head (1%)", queries: 30, color: "#ef4444" },
     { name: "Torso (10%)", queries: 30, color: "#f59e0b" },
     { name: "Tail (89%)", queries: 40, color: "#22c55e" },
 ];
+
+const takeaways = [
+    { title: "Power Law", description: "Search follows a power law (Zipf's Law). A few queries (Head) drive massive volume." },
+    { title: "Head Strategy", description: "Memory-bound (CPU). Optimize with aggressive caching and manual curation." },
+    { title: "Tail Strategy", description: "IO-bound (Disk). Optimize with semantic search and query expansion (recall)." },
+    { title: "Scalability Paradox", description: "You can't use the same architecture for both. Adaptive pipelines are required." }
+];
+
+
 
 const investmentData = [
     { name: "Head", investment: 40, impact: 50 },
@@ -339,6 +349,9 @@ export default function PowerLawsPage() {
                     </div>
                 </div>
             </section>
+
+            {/* Key Takeaways */}
+            <KeyTakeaways takeaways={takeaways} />
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

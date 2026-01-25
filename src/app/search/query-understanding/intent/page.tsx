@@ -3,12 +3,20 @@
 import { GitCompare, AlertCircle, Check, X, ArrowRight, ArrowLeft, Zap, BookOpen, TrendingDown, Code2 } from "lucide-react";
 import Link from "next/link";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
 
 const gapData = [
     { scenario: "Negation", token_match: 10, intent_match: 95 },
     { scenario: "Synonyms", token_match: 25, intent_match: 90 },
     { scenario: "Modifiers", token_match: 40, intent_match: 85 },
     { scenario: "Entities", token_match: 55, intent_match: 90 },
+];
+
+const takeaways = [
+    { title: "Tokens vs Intent", description: "The literal words typed are just a hint. You must infer the underlying goal." },
+    { title: "Synonyms", description: "Table stakes. You must handle \"couch\" vs \"sofa\" and \"sneakers\" vs \"shoes\"." },
+    { title: "Hard Problems", description: "Negation (\"without\") and modifiers (\"cheap\", \"best\") require logic, not just matching." },
+    { title: "Hybrid Wins", description: "Use tokens for precision (exact match) and semantics (vectors) for recall." }
 ];
 
 export default function IntentPage() {
@@ -349,16 +357,8 @@ export default function IntentPage() {
             </section>
 
             {/* Key Takeaways */}
-            <section className="bg-primary/5 p-6 rounded-xl border border-primary/20">
-                <h2 className="text-lg font-semibold mb-4">Key Takeaways</h2>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li>• <strong>Tokens ≠ Intent</strong>  the literal words typed are just a hint at what users want</li>
-                    <li>• <strong>Synonyms are table stakes</strong>  you must handle "couch" vs "sofa", "sneakers" vs "athletic shoes"</li>
-                    <li>• <strong>Negation is hard</strong>  "without X" often incorrectly returns results containing X</li>
-                    <li>• <strong>Intent modifiers need special handling</strong>  "cheap", "best", "comfortable" are constraints, not keywords</li>
-                    <li>• <strong>Hybrid approaches win</strong>  tokens for precision, semantics for recall</li>
-                </ul>
-            </section>
+            <KeyTakeaways takeaways={takeaways} />
+
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

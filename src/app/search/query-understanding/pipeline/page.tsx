@@ -3,6 +3,7 @@
 import { Settings, Zap, Clock, ArrowRight, ArrowLeft, CheckCircle2, Database, Server, Smartphone, Globe, Layers, Code2 } from "lucide-react";
 import Link from "next/link";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
 
 const latencyData = [
     { stage: "Normalize", time: 5, color: "#22c55e" },
@@ -11,6 +12,13 @@ const latencyData = [
     { stage: "Intent", time: 3, color: "#ec4899" },
     { stage: "Expand", time: 3, color: "#14b8a6" },
     { stage: "Rewrite", time: 2, color: "#8b5cf6" },
+];
+
+const takeaways = [
+    { title: "7-Stage Pipeline", description: "Query understanding is a deterministic pipeline: Clean -> Fix -> Extract -> Classify -> Enrich." },
+    { title: "Latency Budget", description: "You have ~50ms total. P50 should be 35ms." },
+    { title: "Bottlenecks", description: "Spell correction and NER are the most expensive steps." },
+    { title: "Optimization", description: "Parallelize NER + Intent. Cache aggressively (head queries)." }
 ];
 
 export default function PipelinePage() {
@@ -391,18 +399,8 @@ export default function PipelinePage() {
             </section>
 
             {/* Key Takeaways */}
-            <section className="bg-primary/5 p-6 rounded-xl border border-primary/20">
-                <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-green-500" /> Key Takeaways
-                </h2>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li>• <strong>Query understanding is a 7-stage pipeline</strong></li>
-                    <li>• <strong>Total latency budget: ~50ms</strong> (P50: 35ms)</li>
-                    <li>• <strong>Spell correction + NER are most expensive</strong></li>
-                    <li>• <strong>Parallelize where possible</strong> (NER + Intent)</li>
-                    <li>• <strong>Cache aggressively</strong>  head queries should hit cache</li>
-                </ul>
-            </section>
+            <KeyTakeaways takeaways={takeaways} />
+
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

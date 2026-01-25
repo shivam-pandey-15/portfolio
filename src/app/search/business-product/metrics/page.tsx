@@ -1,5 +1,13 @@
 import { BarChart3, LineChart, AlertTriangle, CheckCircle, ArrowRight, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
+
+const takeaways = [
+    { title: "Offline vs Online", description: "Use offline metrics (NDCG) for development, online metrics (CTR, ZRR) for production." },
+    { title: "Zero Result Rate", description: "The most critical metric to fix first. Direct indicator of user failure." },
+    { title: "CTR Trap", description: "High CTR + Low Conversion = Clickbait. Trust conversion over clicks." },
+    { title: "Golden Rule", description: "Never ship something that regresses offline AND online. Use online to confirm offline wins." }
+];
 
 export default function MetricsPage() {
     return (
@@ -322,16 +330,8 @@ export default function MetricsPage() {
             </section>
 
             {/* Key Takeaways */}
-            <section className="bg-primary/5 p-6 rounded-xl border border-primary/20">
-                <h2 className="text-lg font-semibold mb-4">Key Takeaways</h2>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li>• <strong>Offline metrics</strong> (NDCG, Precision) for development; <strong>Online metrics</strong> (CTR, ZRR) for production</li>
-                    <li>• <strong>Zero Result Rate is the first metric to fix</strong>  direct revenue loss</li>
-                    <li>• <strong>CTR can be misleading</strong>  high CTR + low conversion = clickbait</li>
-                    <li>• <strong>Use multiple metrics together</strong>  no single metric tells the whole story</li>
-                    <li>• <strong>Set alerts for anomalies</strong>  catch regressions early</li>
-                </ul>
-            </section>
+            <KeyTakeaways takeaways={takeaways} />
+
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

@@ -2,6 +2,14 @@
 
 import { ArrowRight, ArrowLeft, Server, Network, CheckCircle2, AlertTriangle, Database, Hash, Layers, RefreshCw, Settings, Code2, Activity, Book, Shield, Zap } from "lucide-react";
 import Link from "next/link";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
+
+const takeaways = [
+    { title: "Horizontal Scale", description: "Sharding splits data across nodes to exceed single-machine limits. Shards are independent Lucene indices." },
+    { title: "Deterministic Routing", description: "hash(id) % shards guarantees we always know where a document lives. Changing shard count breaks this (reindex required)." },
+    { title: "Replicas = Safety + Speed", description: "Replica shards provide HA (failover) and increase read throughput (load balancing)." },
+    { title: "Deep Pagination Danger", description: "Scatter-Gather requires sorting (shards * page_size) docs in memory. Use search_after for deep scrolling." }
+];
 
 export default function Sharding() {
     return (
@@ -616,41 +624,7 @@ export default function Sharding() {
             </section>
 
             {/* Key Takeaways */}
-            <section className="bg-green-100 border-2 border-green-500 p-6 rounded-xl">
-                <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-green-800">
-                    <CheckCircle2 className="w-5 h-5" /> Key Takeaways
-                </h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                    <ul className="space-y-2 text-sm text-green-900">
-                        <li className="flex items-start gap-2">
-                            <Database className="w-4 h-4 shrink-0 mt-0.5" />
-                            <span><strong>Sharding splits data</strong> across nodes for horizontal scaling.</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <Hash className="w-4 h-4 shrink-0 mt-0.5" />
-                            <span><strong>hash(id) % shards</strong> → deterministic routing.</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <Network className="w-4 h-4 shrink-0 mt-0.5" />
-                            <span><strong>Replicas provide</strong> fault tolerance AND read throughput.</span>
-                        </li>
-                    </ul>
-                    <ul className="space-y-2 text-sm text-green-900">
-                        <li className="flex items-start gap-2">
-                            <Server className="w-4 h-4 shrink-0 mt-0.5" />
-                            <span><strong>Target 10-50 GB per shard</strong>. Shard count is fixed plan carefully!</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-                            <span><strong>Deep pagination is dangerous</strong> use search_after instead.</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <Layers className="w-4 h-4 shrink-0 mt-0.5" />
-                            <span><strong>Each shard = Lucene index</strong> with its own overhead.</span>
-                        </li>
-                    </ul>
-                </div>
-            </section>
+            <KeyTakeaways takeaways={takeaways} />
 
             {/* 10. Practical API Examples */}
             <section className="space-y-6">

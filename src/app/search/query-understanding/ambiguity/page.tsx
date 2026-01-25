@@ -3,12 +3,20 @@
 import { HelpCircle, Shuffle, Target, ArrowRight, ArrowLeft, CheckCircle2, Code2, Layers, MousePointerClick, Brain, AlertTriangle, GitBranch } from "lucide-react";
 import Link from "next/link";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Legend } from "recharts";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
 
 const ambiguityData = [
     { length: "1 word", ambiguity: 85, color: "#ef4444" },
     { length: "2 words", ambiguity: 65, color: "#f59e0b" },
     { length: "3-4 words", ambiguity: 40, color: "#eab308" },
     { length: "5+ words", ambiguity: 15, color: "#22c55e" },
+];
+
+const takeaways = [
+    { title: "Ambiguity Types", description: "Queries fail due to Lexical (polysemy), Syntactic (structure), Intent (goal), or Scope (vagueness) ambiguity." },
+    { title: "Signal Hierarchy", description: "Personal history > Session context > Geo/Device > Global popularity." },
+    { title: "Measurement", description: "Use Click Entropy to mathematically measure how confusing a query is to users." },
+    { title: "Graceful Degradation", description: "If confident, personalize. If ambiguous, clarify (chips). If unsure, diversify results." }
 ];
 
 export default function AmbiguityPage() {
@@ -406,6 +414,9 @@ export default function AmbiguityPage() {
                     </table>
                 </div>
             </section>
+
+            {/* Key Takeaways */}
+            <KeyTakeaways takeaways={takeaways} />
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

@@ -1,5 +1,13 @@
 import { Search, Database, BarChart2, Layout, MousePointer, Eye, ShoppingCart, ArrowRight, ArrowLeft, ArrowDown } from "lucide-react";
 import Link from "next/link";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
+
+const takeaways = [
+    { title: "P0 Priority", description: "Fix zero results. It causes direct revenue loss and user abandonment." },
+    { title: "P1 Priority", description: "Improve ranking. Users rarely go past the first page." },
+    { title: "Funnel Leakage", description: "Search is a 7-stage funnel. Leakage compounds at every step." },
+    { title: "Presentation", description: "Bad snippets or slow load times kill conversion even with perfect ranking." }
+];
 
 export default function FunnelPage() {
     return (
@@ -260,29 +268,9 @@ export default function FunnelPage() {
                 </div>
             </section>
 
-            {/* Key Insight */}
-            <section className="bg-primary/5 p-6 rounded-xl border border-primary/20">
-                <h2 className="text-lg font-semibold mb-4">The 80/20 Rule</h2>
-                <p className="text-muted-foreground mb-4">Most value is at the <strong>top of the funnel</strong>:</p>
-                <ul className="space-y-2 text-sm">
-                    <li className="flex items-center gap-2">
-                        <span className="w-16 font-mono text-xs bg-primary/20 px-2 py-0.5 rounded">P0</span>
-                        <span>Fix zero results → Huge impact</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                        <span className="w-16 font-mono text-xs bg-primary/10 px-2 py-0.5 rounded">P1</span>
-                        <span>Improve ranking → Large impact</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                        <span className="w-16 font-mono text-xs bg-secondary px-2 py-0.5 rounded">P2</span>
-                        <span>Better snippets → Medium impact</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                        <span className="w-16 font-mono text-xs bg-secondary/50 px-2 py-0.5 rounded">P3</span>
-                        <span>Faster checkout → Lower impact (after search)</span>
-                    </li>
-                </ul>
-            </section>
+            {/* Key Takeaways */}
+            <KeyTakeaways takeaways={takeaways} />
+
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

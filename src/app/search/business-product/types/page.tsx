@@ -1,5 +1,13 @@
 import { ShoppingCart, FileText, Globe, Code, Database, Play, ArrowRight, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
+
+const takeaways = [
+    { title: "E-commerce", description: "Focus on structure usage (price/brand) and business logic (inventory/margins)." },
+    { title: "Document Search", description: "Permissions and recency are the hardest problems. Recall is more important than precision." },
+    { title: "Web Search", description: "Scale (billions of pages) and spam detection are the unique challenges." },
+    { title: "Media Search", description: "Content understanding (ML on video/audio) is key for retrieval." }
+];
 
 export default function TypesPage() {
     return (
@@ -269,6 +277,9 @@ export default function TypesPage() {
                     </tbody>
                 </table>
             </section>
+
+            {/* Key Takeaways */}
+            <KeyTakeaways takeaways={takeaways} />
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

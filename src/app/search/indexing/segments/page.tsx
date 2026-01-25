@@ -2,6 +2,14 @@
 
 import { ArrowRight, ArrowLeft, ShieldCheck, AlertTriangle, CheckCircle2, Merge, FileStack, Trash2, RefreshCw, Database, Layers, HardDrive, Settings, Code2, BarChart3, Zap, Server, Activity, Book } from "lucide-react";
 import Link from "next/link";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
+
+const takeaways = [
+    { title: "Segments are Immutable", description: "Once written, never modified. This enables lock-free reads, perfect caching, and robust crash recovery." },
+    { title: "Refresh = Visibility", description: "Documents are only searchable after a 'refresh' writes them to a segment (default 1s). Costly for throughput." },
+    { title: "The Merge Tax", description: "Merging reclaims space from deleted docs but consumes I/O. Never force-merge actively written indices." },
+    { title: "Write Amplification", description: "Due to immutable segments and merging, a single document write results in 5-7x physical disk I/O." }
+];
 
 export default function Segments() {
     return (
@@ -711,47 +719,8 @@ export default function Segments() {
                 </div>
             </section>
 
-            {/* 10. Enhanced Key Takeaways */}
-            <section className="bg-green-100 border-2 border-green-500 p-6 rounded-xl">
-                <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-green-800">
-                    <CheckCircle2 className="w-5 h-5" /> Key Takeaways
-                </h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                        <h4 className="font-bold text-green-800 mb-2">Core Principles</h4>
-                        <ul className="space-y-2 text-sm text-green-900">
-                            <li className="flex items-start gap-2">
-                                <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5" />
-                                <span><strong>Segments are immutable</strong> → lock-free reads, perfect caching, crash recovery.</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <RefreshCw className="w-4 h-4 shrink-0 mt-0.5" />
-                                <span><strong>Refresh creates segments</strong> → data searchable within ~1s. Tune for your workload.</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <Merge className="w-4 h-4 shrink-0 mt-0.5" />
-                                <span><strong>Merge reclaims space</strong> → force-merge only for read-only indices.</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-                                <span><strong>Write amplification is 5-7x</strong> → plan disk capacity accordingly.</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 className="font-bold text-green-800 mb-2">Best Practices Checklist</h4>
-                        <ul className="space-y-1 text-sm text-green-900">
-                            <li>☑ Set refresh_interval &gt; 1s for ingestion-heavy indices</li>
-                            <li>☑ Monitor segment count with _cat/segments</li>
-                            <li>☑ Force-merge after bulk loads complete</li>
-                            <li>☑ Use ILM to automate segment management</li>
-                            <li>☑ Keep delete ratio below 30%</li>
-                            <li>☑ Plan storage for 7x write amplification</li>
-                            <li>☑ Use SSDs for merge I/O performance</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+            {/* 10. Key Takeaways */}
+            <KeyTakeaways takeaways={takeaways} />
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

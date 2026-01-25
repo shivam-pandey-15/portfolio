@@ -1,5 +1,14 @@
 import { ArrowRight, BookOpen, Zap, Filter, ArrowDown, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
+
+const takeaways = [
+    { title: "The Inverted Index", description: "Maps Term → Documents, enabling O(1) lookups for full-text search." },
+    { title: "Intersection", description: "AND queries are intersections. The smallest posting list is processed first for efficiency." },
+    { title: "Compression", description: "Techniques like delta encoding and VInt reduce storage by 40x for common terms." },
+    { title: "Analysis Consistency", description: "The same analysis pipeline must be used at index time and query time." },
+    { title: "Field Types", description: "Use 'text' for full-text search and 'keyword' for exact filtering/aggregations." }
+];
 
 export default function InvertedIndex() {
     return (
@@ -437,33 +446,8 @@ export default function InvertedIndex() {
             </section>
 
             {/* Key Takeaways */}
-            <section className="bg-green-100 border-2 border-green-500 p-6 rounded-xl">
-                <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-green-800">
-                    <CheckCircle2 className="w-5 h-5" /> Key Takeaways
-                </h2>
-                <ul className="space-y-2 text-sm text-green-900">
-                    <li className="flex items-start gap-2">
-                        <Zap className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>The inverted index maps <strong>Term → Documents</strong>, enabling O(1) lookups.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <Filter className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>AND queries are intersections. The smallest posting list is processed first.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <BookOpen className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>Compression (delta encoding, VInt) reduces storage by 40x for common terms.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <BookOpen className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Analysis matters:</strong> Same pipeline at index time and query time.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <BookOpen className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>Use <strong>text</strong> for full-text search, <strong>keyword</strong> for exact matches.</span>
-                    </li>
-                </ul>
-            </section>
+            <KeyTakeaways takeaways={takeaways} />
+
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

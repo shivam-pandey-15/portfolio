@@ -1,5 +1,12 @@
 import { CheckCircle2, Database, Layers, Network, Zap, ArrowRight, ArrowLeft, BarChart3, Server } from "lucide-react";
 import Link from "next/link";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
+
+const takeaways = [
+    { title: "The Five Data Types", description: "Text (Unstructured), Structured (Exact), Semi-Structured (Flexible), Graph (Relationships), and Behavioral (Signals)." },
+    { title: "The Three Views", description: "Source of Truth (OLTP), Search Index (Denormalized), and Feature Store (ML Signals). Don't try to make one DB do it all." },
+    { title: "Event-Driven Integrity", description: "Use CDC (Debezium) and Kafka to populate your views. Never dual-write from the application." }
+];
 
 export default function TypesPage() {
     return (
@@ -437,25 +444,7 @@ export default function TypesPage() {
             </section>
 
             {/* Key Takeaways */}
-            <section className="bg-green-100 border-2 border-green-500 p-6 rounded-xl">
-                <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-green-800">
-                    <CheckCircle2 className="w-5 h-5" /> Key Takeaways
-                </h2>
-                <ul className="space-y-2 text-sm text-green-900">
-                    <li className="flex items-start gap-2">
-                        <Zap className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>Five data types: Text (unstructured), Structured (exact), Semi-Structured (flexible), Graph (relationships), Behavioral (signals).</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <Zap className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>Three views: Source of Truth (OLTP), Search Index (denormalized), Feature Store (ML signals).</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <Zap className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>Use CDC (Debezium) and Kafka for event-driven data pipelines. Never dual-write.</span>
-                    </li>
-                </ul>
-            </section>
+            <KeyTakeaways takeaways={takeaways} />
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

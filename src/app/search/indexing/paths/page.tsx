@@ -2,6 +2,14 @@
 
 import { ArrowRight, ArrowLeft, ArrowDown, Clock, CheckCircle2, Database, Zap, RefreshCw, AlertTriangle, Book, Activity, Layers, Search, Server, Monitor, FileText } from "lucide-react";
 import Link from "next/link";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
+
+const takeaways = [
+    { title: "Tune Refresh Interval", description: "Default 1s is too aggressive for heavy writes. Set to 30s+ to reduce segment creation overhead by 90%." },
+    { title: "Monitor OS Page Cache", description: "Elasticsearch relies on the OS for caching. If you starve the FS cache (by giving Heap > 50%), latency tanks." },
+    { title: "Filter First", description: "Filter clauses are cached (bitsets) and fast. Use them to narrow down the document set before expensive scoring runs." },
+    { title: "Fetch Less", description: "Retrieving large _source fields is a network bottleneck. Use source filtering to get only what you display." }
+];
 
 export default function Paths() {
     return (
@@ -457,34 +465,8 @@ export default function Paths() {
                 </div>
             </section>
 
-            {/* 12. Best Practices */}
-            <section className="bg-green-100 border-2 border-green-500 p-6 rounded-xl">
-                <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-green-800">
-                    <CheckCircle2 className="w-5 h-5" /> Best Practices
-                </h2>
-                <div className="grid md:grid-cols-2 gap-6 text-sm text-green-900">
-                    <ul className="space-y-2">
-                        <li className="flex gap-2">
-                            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
-                            <span><strong>Increase Refresh Interval:</strong> Default 1s is too aggressive for heavy writes. Set to `30s` to reduce segment creation overhead by 90%.</span>
-                        </li>
-                        <li className="flex gap-2">
-                            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
-                            <span><strong>Avoid Manual Flush:</strong> Elasticsearch manages flushes automatically. Only force-flush before restarts.</span>
-                        </li>
-                    </ul>
-                    <ul className="space-y-2">
-                        <li className="flex gap-2">
-                            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
-                            <span><strong>Fetch Less:</strong> Don't return large stored fields (`_source`) if you don't need them. Use `_source: ["id", "title"]`.</span>
-                        </li>
-                        <li className="flex gap-2">
-                            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
-                            <span><strong>Monitor RAM:</strong> If OS Page Cache is starved, IOPS will spike and latency will tank.</span>
-                        </li>
-                    </ul>
-                </div>
-            </section>
+            {/* Key Takeaways */}
+            <KeyTakeaways takeaways={takeaways} />
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

@@ -1,5 +1,13 @@
 import { AlertTriangle, Zap, Clock, Copy, Filter, DollarSign, ArrowRight, ArrowLeft, TrendingDown } from "lucide-react";
 import Link from "next/link";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
+
+const takeaways = [
+    { title: "Zero Results = Lost Revenue", description: "Industry average ZRR is 5-15%. Each 1% reduction drives ~1-2% revenue lift. Fix synonyms and spelling." },
+    { title: "Latency Kills", description: ">1s latency causes users to open a new tab. Amazon found 100ms latency = 1% revenue loss." },
+    { title: "The Position 1 Problem", description: "68% of clicks go to top 3 results. If result #1 is irrelevant, the user assumes the product doesn't exist." },
+    { title: "Duplicates Dilute Signals", description: "Identical listings confuse users and split ranking data, making it harder to identify the 'best' item." }
+];
 
 export default function FailurePage() {
     return (
@@ -213,6 +221,8 @@ export default function FailurePage() {
                     </div>
                 </div>
             </section>
+
+            <KeyTakeaways takeaways={takeaways} />
 
             {/* Navigation */}
             <div className="flex justify-between pt-8 border-t border-border">

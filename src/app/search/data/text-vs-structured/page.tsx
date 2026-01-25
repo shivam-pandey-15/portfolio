@@ -1,7 +1,16 @@
 "use client";
 
-import { ArrowRight, ArrowLeft, ArrowDown, Database, Terminal, AlertTriangle, CheckCircle2, XCircle, Search, FileText, Binary, Scale, Layers, LayoutGrid, Settings, List, Calendar, Filter, SortAsc } from "lucide-react";
+import { ArrowRight, ArrowLeft, ArrowDown, Database, Terminal, AlertTriangle, CheckCircle2, XCircle, Search, FileText, Binary, Scale, Layers, LayoutGrid, Settings, List, Calendar, Filter, SortAsc, Hammer } from "lucide-react";
 import Link from "next/link";
+import { KeyTakeaways } from "@/components/search/key-takeaways";
+
+const takeaways = [
+    { title: "Text is for Search", description: "Use 'text' fields for human language, fuzzy matching, and relevance scoring. Use 'keyword' for IDs, tags, and exact filters." },
+    { title: "Structured is for Filters", description: "Use Numeric/Date types (BKD Trees) for ranges and sorting. Never store numbers as strings." },
+    { title: "The ID Trap", description: "Never index SKUs or UUIDs as 'text'. It causes false positive matches on partial tokens." },
+    { title: "Type = Performance", description: "Wrong field types silently destroy latency and memory. Measure twice, index once." },
+    { title: "No Easy Fix", description: "Mapping mistakes usually require a full reindex. Measure twice, cut once." }
+];
 
 export default function TextVsStructured() {
     return (
@@ -331,6 +340,32 @@ export default function TextVsStructured() {
                     </div>
                 </div>
 
+                {/* 3.3 Everything as Text */}
+                <div className="bg-zinc-50 border-2 border-zinc-200 rounded-xl p-6">
+                    <h3 className="font-bold text-zinc-900 mb-2 flex items-center gap-2">
+                        <FileText className="w-5 h-5" /> The "Everything as Text" Anti-Pattern
+                    </h3>
+                    <p className="text-sm text-zinc-600 mb-4">
+                        Teams often index everything as <code className="bg-zinc-100 px-1 rounded">text</code> "just in case" they need search.
+                    </p>
+                    <div className="grid grid-cols-2 gap-4 text-xs">
+                        <div className="bg-red-50 border border-red-100 p-3 rounded">
+                            <div className="font-bold text-red-900 text-sm mb-1">Consequences</div>
+                            <ul className="list-disc list-inside text-red-800 space-y-1">
+                                <li>Sorting breaks (lexicographical)</li>
+                                <li>Aggregations are slow/impossible</li>
+                                <li>Heap explodes (Field Data)</li>
+                            </ul>
+                        </div>
+                        <div className="bg-zinc-100 border border-zinc-200 p-3 rounded">
+                            <div className="font-bold text-zinc-900 text-sm mb-1">Relevance Pollution</div>
+                            <p className="text-zinc-600">
+                                Matching on low-value fields (like UUIDs or status codes) dilutes the score of actual matches in Title/Description.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
                 {/* Mistake 4 - Cardinality */}
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
                     <h3 className="font-bold text-amber-900 mb-2 flex items-center gap-2">
@@ -345,6 +380,39 @@ export default function TextVsStructured() {
                     </div>
                     <div className="mt-4 text-sm text-amber-900 font-bold">
                         Fix: Use <span className="font-mono">execution_hint: "map"</span> or Composite Aggregations for high-cardinality fields.
+                    </div>
+                </div>
+
+                {/* 3.5 Cardinality Classes */}
+                <div className="overflow-x-auto rounded-xl border border-zinc-200">
+                    <table className="w-full text-sm">
+                        <thead className="bg-zinc-50">
+                            <tr>
+                                <th className="px-4 py-2 text-left font-semibold text-zinc-700">Cardinality</th>
+                                <th className="px-4 py-2 text-left font-semibold text-zinc-700">Examples</th>
+                                <th className="px-4 py-2 text-left font-semibold text-zinc-700">Safe Operations</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-zinc-200 bg-white">
+                            <tr>
+                                <td className="px-4 py-2 font-mono text-green-700">Low (&lt; 1k)</td>
+                                <td className="px-4 py-2">Status, Category, Country</td>
+                                <td className="px-4 py-2 text-green-700 font-bold">Aggregations OK</td>
+                            </tr>
+                            <tr>
+                                <td className="px-4 py-2 font-mono text-amber-700">Medium (1k - 1M)</td>
+                                <td className="px-4 py-2">Brand, Tags, Author</td>
+                                <td className="px-4 py-2 text-amber-700 font-bold">Aggs with care</td>
+                            </tr>
+                            <tr>
+                                <td className="px-4 py-2 font-mono text-red-700">High (&gt; 1M)</td>
+                                <td className="px-4 py-2">User ID, Session ID, IP</td>
+                                <td className="px-4 py-2 text-red-700 font-bold">Avoid Terms Aggs</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div className="bg-zinc-50 p-2 text-xs text-center border-t border-zinc-200 text-zinc-500">
+                        Rule of thumb: If unique values &asymp; document count, treat as toxic for aggregations.
                     </div>
                 </div>
             </section>
@@ -397,6 +465,37 @@ export default function TextVsStructured() {
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </section>
+
+            {/* 4.1 Filter Context vs Query Context */}
+            <section className="bg-indigo-50 border-2 border-indigo-100 rounded-xl p-6">
+                <h3 className="font-bold text-indigo-900 mb-4 flex items-center gap-2">
+                    <Filter className="w-5 h-5" /> Filter Context vs Query Context
+                </h3>
+                <div className="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <div className="font-bold text-sm text-indigo-800 mb-2">Filter Context (No Score)</div>
+                        <ul className="text-sm text-indigo-700 space-y-1 list-disc list-inside mb-4">
+                            <li>Binary Yes/No</li>
+                            <li><strong>Cacheable</strong> (Fast)</li>
+                            <li>Use for: Status, Brand, Price Range</li>
+                        </ul>
+                        <div className="bg-white rounded border border-indigo-200 p-3 font-mono text-xs text-indigo-600">
+                            "filter": &#123; "term": &#123; "status": "active" &#125; &#125;
+                        </div>
+                    </div>
+                    <div>
+                        <div className="font-bold text-sm text-indigo-800 mb-2">Query Context (Scoring)</div>
+                        <ul className="text-sm text-indigo-700 space-y-1 list-disc list-inside mb-4">
+                            <li>Calculates Relevance Score</li>
+                            <li><strong>Not Cacheable</strong> (Slower)</li>
+                            <li>Use for: Full-text search</li>
+                        </ul>
+                        <div className="bg-white rounded border border-indigo-200 p-3 font-mono text-xs text-indigo-600">
+                            "must": &#123; "match": &#123; "title": "iphone" &#125; &#125;
+                        </div>
                     </div>
                 </div>
             </section>
@@ -463,29 +562,77 @@ export default function TextVsStructured() {
                             Most fields need to be capable of both. Don't choose one. Use multi-fields to get the best of both worlds.
                         </p>
                     </div>
+
+                    {/* Multi-Fields Explosion */}
+                    <div className="col-span-full bg-red-50 border border-red-200 rounded-lg p-4">
+                        <h4 className="font-bold text-sm text-red-900 mb-1 flex items-center gap-2">
+                            <AlertTriangle className="w-4 h-4" /> When Multi-Fields Explode Index Size
+                        </h4>
+                        <p className="text-xs text-red-800 mb-2">
+                            Every multi-field creates a duplicated inverted index (and doc values) on disk.
+                            10 text fields × 3 sub-fields = 30 actual fields.
+                        </p>
+                        <div className="font-bold text-xs text-red-900">
+                            Rule: Only multi-field what you actually sort or aggregate on.
+                        </div>
+                    </div>
+                </div>
+
+                {/* 5.1 Date & Time Gotchas */}
+                <div className="bg-zinc-50 border-2 border-zinc-200 rounded-xl p-6">
+                    <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                        <Calendar className="w-5 h-5 text-zinc-600" /> Date & Time Gotchas
+                    </h3>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 className="font-bold text-sm text-zinc-900 mb-2">The Problem</h4>
+                            <p className="text-sm text-zinc-600">
+                                Timezones are hard. "2024-01-01" implies UTC in Elasticsearch, but your user might be in EST.
+                                Range queries often miss the "last day" due to millisecond precision.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 className="font-bold text-sm text-zinc-900 mb-2">The Fix</h4>
+                            <ul className="list-disc list-inside text-sm text-zinc-600">
+                                <li><strong>Always</strong> store dates in UTC internally (Epoch millis or ISO-8601).</li>
+                                <li>Normalize query timezones at the application layer.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 6. Production Mapping Rules */}
+            <section className="bg-zinc-900 text-zinc-100 p-8 rounded-xl border border-zinc-800">
+                <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                    <List className="w-5 h-5 text-zinc-400" /> Production Mapping Rules
+                </h2>
+                <div className="grid md:grid-cols-2 gap-8">
+                    <div className="space-y-4">
+                        <div className="text-red-400 font-bold flex items-center gap-2">
+                            <XCircle className="w-4 h-4" /> NEVER
+                        </div>
+                        <ul className="space-y-2 text-sm text-zinc-400">
+                            <li>• Use <code className="bg-zinc-800 px-1 rounded text-red-300">text</code> for IDs (UUID, SKU)</li>
+                            <li>• Use <code className="bg-zinc-800 px-1 rounded text-red-300">keyword</code> for full paragraphs</li>
+                            <li>• Use <code className="bg-zinc-800 px-1 rounded text-red-300">string</code> for numbers or dates</li>
+                        </ul>
+                    </div>
+                    <div className="space-y-4">
+                        <div className="text-green-400 font-bold flex items-center gap-2">
+                            <CheckCircle2 className="w-4 h-4" /> ALWAYS
+                        </div>
+                        <ul className="space-y-2 text-sm text-zinc-400">
+                            <li>• Use <code className="bg-zinc-800 px-1 rounded text-green-300">keyword</code> for Filters/Aggs</li>
+                            <li>• Use <code className="bg-zinc-800 px-1 rounded text-green-300">numeric</code> for Ranges</li>
+                            <li>• Use <code className="bg-zinc-800 px-1 rounded text-green-300">text</code> for Relevance/Scoring</li>
+                        </ul>
+                    </div>
                 </div>
             </section>
 
             {/* Key Takeaways */}
-            <section className="bg-green-100 border-2 border-green-500 p-6 rounded-xl">
-                <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-green-800">
-                    <CheckCircle2 className="w-5 h-5" /> Key Takeaways
-                </h2>
-                <ul className="space-y-2 text-sm text-green-900">
-                    <li className="flex items-start gap-2">
-                        <FileText className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Text is for Search:</strong> Use it when you need partial matches, linguistic intelligence, and relevance scoring.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <Binary className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Structured is for Filters:</strong> Use Keyword, Numeric, and Date for binary Yes/No filtering and sorting.</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span><strong>Watch Your IDs:</strong> Never index SKUs or UUIDs as text. It causes false positive matches.</span>
-                    </li>
-                </ul>
-            </section>
+            <KeyTakeaways takeaways={takeaways} />
 
             <div className="flex justify-between pt-8 border-t border-border">
                 <Link href="/search/data/modeling" className="text-sm font-medium text-muted-foreground hover:text-primary flex items-center gap-2">
