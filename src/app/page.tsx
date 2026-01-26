@@ -11,8 +11,8 @@ export default function Home() {
           <p className="text-muted-foreground mt-1">By Shivam Pandey</p>
         </div>
         <nav>
-          <a href="https://github.com/shivam-pandey-15" className="text-sm font-medium hover:text-primary transition-colors">
-            GitHub
+          <a href="https://www.linkedin.com/in/shivam-pandey-a1b2a6143/" className="text-sm font-medium hover:text-primary transition-colors">
+            LinkedIn
           </a>
         </nav>
       </header>
@@ -23,8 +23,8 @@ export default function Home() {
           Explore real-world engineering systems.
         </h2>
         <p className="text-xl text-muted-foreground leading-relaxed">
-          A high-quality systems exploration site. Dive into the architecture of search, recommendation engines, and massive-scale infrastructure.
-          Not a bloga guided tour through the machine.
+          A premium resource for systems exploration. Dive deep into the architecture of search engines.
+          Not just a blog, a guided tour through the machine.
         </p>
       </section>
 
@@ -38,12 +38,12 @@ export default function Home() {
             </div>
             <h3 className="text-xl font-semibold mb-2 flex items-center gap-2">
               Search Systems
-              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-green-100 text-green-700 border border-green-200">
-                Live
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200">
+                In Progress
               </span>
             </h3>
             <p className="text-muted-foreground flex-grow">
-              Understand the pipeline from crawling to ranking. Explore inverted indices, retrieval algorithms, and serving infrastructure.
+              Master the value chain from crawling to ranking. Explore inverted indices, retrieval algorithms, and serving infrastructure.
             </p>
             <div className="mt-6 flex items-center text-sm font-medium text-primary group-hover:translate-x-1 transition-transform">
               Explore World <ArrowRight className="w-4 h-4 ml-1" />

@@ -6,9 +6,9 @@ export default function SearchOverview() {
         <div className="space-y-16 animate-in fade-in duration-500">
             {/* Hero Section */}
             <div className="space-y-8">
-                <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-sm text-primary">
-                    <span className="flex h-2 w-2 rounded-full bg-primary mr-2 animate-pulse"></span>
-                    Live Document
+                <div className="inline-flex items-center rounded-full border border-amber-500/20 bg-amber-500/5 px-3 py-1 text-sm text-amber-500">
+                    <span className="flex h-2 w-2 rounded-full bg-amber-500 mr-2 animate-pulse"></span>
+                    In Progress
                 </div>
 
                 <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-primary">
