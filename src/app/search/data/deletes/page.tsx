@@ -40,7 +40,7 @@ export default function DeletesPage() {
                     </p>
                     <p>
                         Instead, Lucene maintains a parallel file called the <strong>Bitset (Live Docs)</strong>.
-                        A delete is simply flipping a bit from 1 to 0. The document is still on disk, still in memory, and still being processed by your search queries—it is merely "tombstoned" and filtered out at the very last step.
+                        A delete is simply flipping a bit from 1 to 0. The document is still on disk, still in memory, and still being processed by your search queries it is merely "tombstoned" and filtered out at the very last step.
                     </p>
                 </div>
 
@@ -117,7 +117,7 @@ export default function DeletesPage() {
                             </h4>
                             <p className="text-sm text-zinc-600 mb-3">
                                 You can manually trigger `_forcemerge` to clean up, but be careful.
-                                It works like a "Garbage Collection" for disk—extremely I/O intensive.
+                                It works like a "Garbage Collection" for disk extremely I/O intensive.
                             </p>
                             <div className="bg-zinc-200 px-2 py-1 rounded text-xs font-mono inline-block">
                                 POST /index/_forcemerge?max_num_segments=1

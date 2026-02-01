@@ -20,7 +20,7 @@ export default function RecallVsPrecision() {
                 <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
                     Retrieval is the art of casting a net, not throwing a spear. In a multi-stage search architecture,
                     the primary job of Stage 1 is to ensure the right answer is <em>in the building</em>.
-                    Retrieval exists to satisfy latency, memory, and CPU budgets under a recall constraint — not to optimize relevance.
+                    Retrieval exists to satisfy latency, memory, and CPU budgets under a recall constraint   not to optimize relevance.
                     Everything else is secondary.
                 </p>
             </div>

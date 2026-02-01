@@ -78,8 +78,6 @@ export const searchNavConfig: NavItem[] = [
             { title: "5.5 Execution plans", href: "/search/retrieval/execution-plans" },
             { title: "5.6 WAND & Early termination", href: "/search/retrieval/wand" },
             { title: "5.7 Caching", href: "/search/retrieval/caching" },
-            { title: "5.8 Approximate retrieval (ANN)", href: "/search/retrieval/ann" },
-            { title: "5.9 Hybrid retrieval", href: "/search/retrieval/hybrid" },
         ]
     },
     {

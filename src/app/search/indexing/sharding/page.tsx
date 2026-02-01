@@ -443,7 +443,7 @@ export default function Sharding() {
                         <p className="text-sm text-blue-800 mb-2">
                             Imagine searching for "fastest runners". You might ask each shard for its 10,000th fastest person.
                             But what if <strong>Shard A holds all top 10,000 runners</strong> in the world?
-                            If Shard A only sends its 10,000th person, and Shard B sends its 1st, the Coordinator sees Shard B's person as the winner—which is wrong.
+                            If Shard A only sends its 10,000th person, and Shard B sends its 1st, the Coordinator sees Shard B's person as the winner which is wrong.
                         </p>
                         <p className="text-sm text-blue-800 font-bold">
                             To guarantee accuracy, EVERY shard must return its own top 10,010 results, just in case they are the global winners.

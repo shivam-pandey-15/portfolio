@@ -454,7 +454,7 @@ export default function CleaningPage() {
                         <div className="prose prose-zinc dark:prose-invert max-w-none text-muted-foreground">
                             <p>
                                 The previous steps focused on cleaning *fields*. Now we must clean *records*.
-                                Duplicate records dilute relevance signals—if a user clicks Product A, but Product B is an identical duplicate,
+                                Duplicate records dilute relevance signals if a user clicks Product A, but Product B is an identical duplicate,
                                 your ranking algorithm gets split signals. <strong>Entity Resolution</strong> is the fix.
                             </p>
                         </div>
