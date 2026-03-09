@@ -3,13 +3,13 @@ import Link from "next/link";
 import { KeyTakeaways } from "@/components/search/key-takeaways";
 
 const takeaways = [
-    { title: "The Foundation", description: "Boolean retrieval matches sets. It defines the 'Candidate Set' for stage 2. It is binary: a doc is either in or out." },
-    { title: "FST > Hash Map", description: "We use Finite State Transducers (FSTs) for the dictionary because they support prefixes (run*) and compress 100x better than Hash Maps." },
-    { title: "Compression is Speed", description: "We don't compress to save disk; we compress to save RAM bandwidth. SIMD-BP128 decodes 5 billion integers/sec." },
-    { title: "Roaring Bitmaps", description: "The modern standard for filters. Hybridizes arrays (sparse) and bitsets (dense) for blistering fast set operations." },
-    { title: "Phrase Cost", description: "Positional queries are often an order of magnitude slower, depending on term frequency, phrase length, and survivor set size." },
-    { title: "Block-Oriented Execution", description: "Modern retrieval skips blocks before it ever looks at integers." },
-    { title: "Memory Bandwidth Is the Bottleneck", description: "Almost every optimization in retrieval exists to move fewer bytes, not to save CPU." }
+    { title: "The Foundation", description: "Boolean retrieval is the physical machinery that converts queries into sets of document IDs. It defines the 'Candidate Set' that later stages will score and rank. Every document is binary—either in the candidate set or not—making set operations the core primitive." },
+    { title: "FST > Hash Map", description: "We use Finite State Transducers (FSTs) for the term dictionary because they support prefix queries (run*) and compress 100x better than Hash Maps. An FST shares prefixes across terms, so 'run', 'runner', 'running' share storage for 'run', often fitting entire vocabularies in RAM." },
+    { title: "Compression is Speed", description: "We don't compress to save disk; we compress to save RAM bandwidth. Modern CPUs can process data faster than RAM can deliver it. SIMD-BP128 packs 128 integers into minimal bits and decodes them vectorized—achieving 5 billion integers per second." },
+    { title: "Roaring Bitmaps", description: "The modern standard for filter storage. Roaring Bitmaps hybridize three container types: sorted arrays for sparse data, bitsets for dense data, and run-length encoding for consecutive sequences. This adaptive strategy delivers blistering fast set operations regardless of data distribution." },
+    { title: "Phrase Cost", description: "Phrase queries like '\"new york\"' require verifying term positions within documents, not just term presence. Position files are 3-4x larger than doc ID lists, making phrase queries an order of magnitude slower than simple boolean queries." },
+    { title: "Block-Oriented Execution", description: "Modern retrieval operates on blocks of 128 document IDs, not individual integers. By comparing block metadata (min/max doc IDs) before decompression, engines skip entire blocks that cannot intersect, avoiding decompression overhead entirely." },
+    { title: "Memory Bandwidth Is the Bottleneck", description: "Almost every optimization in retrieval exists to move fewer bytes from RAM to CPU, not to reduce CPU cycles. Compression, block skipping, and SIMD are all about feeding the CPU faster by moving less data." }
 ];
 
 export default function BooleanRetrieval() {
@@ -35,59 +35,74 @@ export default function BooleanRetrieval() {
             {/* 1. Anatomy of an Index */}
             <section className="space-y-8">
                 <h2 className="text-3xl font-bold">The Anatomy of an Inverted Index</h2>
+
+                <p className="text-foreground leading-relaxed">
+                    A search index turns the world upside down. Instead of <code>Doc → Terms</code>, we store <code>Term → Docs</code>.
+                    This inversion is what makes search fast: rather than scanning every document to find which ones contain "python",
+                    we look up "python" directly and retrieve the list of all document IDs containing it.
+                </p>
+
+                <p className="text-foreground leading-relaxed">
+                    Physically, the inverted index is split into two distinct data structures. The <strong>term dictionary</strong>
+                    maps every unique term to a file pointer—like the index at the back of a book that tells you which page to flip to.
+                    The <strong>postings file</strong> contains the actual lists of document IDs at those pointers. This separation
+                    is crucial: the dictionary is small enough to fit in RAM (often just a few hundred megabytes for a billion-document index),
+                    while the postings file can be massive but is accessed sequentially.
+                </p>
+
+                <p className="text-foreground leading-relaxed">
+                    Modern implementations add a third layer: <strong>block indexes</strong> that store metadata about chunks of postings.
+                    Instead of treating each posting list as a flat array, we split it into blocks of 128 document IDs, storing the max
+                    doc ID per block. This enables block-level skipping—if block 47's max doc ID is 10,000 and we're looking for
+                    doc 50,000, we can skip directly to a later block without decompressing the intervening data.
+                </p>
+
                 <div className="grid md:grid-cols-2 gap-8">
-                    <div className="space-y-4">
-                        <p className="text-foreground leading-relaxed">
-                            A search index turns the world upside down. Instead of <code>Doc -&gt; Terms</code>, we store <code>Term -&gt; Docs</code>.
-                            Physically, this is split into two distinct data structures on disk.
-                        </p>
-                        <div className="space-y-6 mt-6">
-                            <div className="bg-zinc-50 border border-zinc-200 p-4 rounded-lg">
-                                <h3 className="font-bold flex items-center gap-2 mb-2">
-                                    <Binary className="w-4 h-4 text-blue-600" />
-                                    1. The Term Dictionary (FST)
-                                </h3>
-                                <p className="text-sm text-zinc-600 mb-2">
-                                    Maps "term" &rarr; "file pointer".
-                                    <br />
-                                    <span className="text-xs text-zinc-500 bg-zinc-100 px-1 rounded border">Like T9 Text / Auto-complete</span>
-                                    <br />
-                                    <strong>Why not a Hash Map?</strong> Hash maps are fast (<code>O(1)</code>) but memory hungry and don't support prefixes.
-                                    We use a <strong>Finite State Transducer (FST)</strong>. It compresses shared prefixes (e.g., "run", "runner", "running") into a graph, often fitting the entire vocabulary in RAM.
-                                </p>
-                            </div>
-                            <div className="bg-zinc-50 border border-zinc-200 p-4 rounded-lg">
-                                <h3 className="font-bold flex items-center gap-2 mb-2">
-                                    <Database className="w-4 h-4 text-purple-600" />
-                                    2. The Postings List
-                                </h3>
-                                <p className="text-sm text-zinc-600 mb-2">
-                                    A sorted list of Document IDs that contain the term.
-                                    <br />
-                                    Constraint: <strong>Must be sorted.</strong> Solving complex queries depends on this sort order (like merging two sorted arrays).
-                                </p>
-                                <div className="mt-3 pt-3 border-t border-zinc-200 text-xs text-zinc-500">
-                                    <strong>Logically:</strong> <code>[docID, freq, positions, payload]</code>
-                                    <br />
-                                    <strong>Physically:</strong> The hot path touches docID always, freq sometimes, positions almost never. This separation is critical for memory locality.
-                                </div>
-                            </div>
-                            <div className="bg-zinc-50 border border-zinc-200 p-4 rounded-lg">
-                                <h3 className="font-bold flex items-center gap-2 mb-2">
-                                    <Box className="w-4 h-4 text-amber-600" />
-                                    3. Block Index / Skip Data
-                                </h3>
-                                <p className="text-sm text-zinc-600 mb-2">
-                                    Large postings lists are not flat arrays. They are split into fixed-size blocks (e.g., 128 docIDs).
-                                    <br />
-                                    Each block stores: <code>maxDocID</code>, compressed payload, and skip offsets.
-                                    <br />
-                                    <strong>Why?</strong> This enables block-level skipping, galloping, and avoiding decompression of blocks that cannot intersect. Modern retrieval is block-oriented, not integer-oriented.
-                                </p>
+                    <div className="space-y-6">
+                        <div className="bg-zinc-50 border border-zinc-200 p-4 rounded-lg">
+                            <h3 className="font-bold flex items-center gap-2 mb-2">
+                                <Binary className="w-4 h-4 text-blue-600" />
+                                1. The Term Dictionary (FST)
+                            </h3>
+                            <p className="text-sm text-zinc-600 mb-2">
+                                Maps "term" &rarr; "file pointer".
+                                <br />
+                                <span className="text-xs text-zinc-500 bg-zinc-100 px-1 rounded border">Like T9 Text / Auto-complete</span>
+                                <br />
+                                <strong>Why not a Hash Map?</strong> Hash maps are fast (<code>O(1)</code>) but memory hungry and don't support prefixes.
+                                We use a <strong>Finite State Transducer (FST)</strong>. It compresses shared prefixes (e.g., "run", "runner", "running") into a graph, often fitting the entire vocabulary in RAM.
+                            </p>
+                        </div>
+                        <div className="bg-zinc-50 border border-zinc-200 p-4 rounded-lg">
+                            <h3 className="font-bold flex items-center gap-2 mb-2">
+                                <Database className="w-4 h-4 text-purple-600" />
+                                2. The Postings List
+                            </h3>
+                            <p className="text-sm text-zinc-600 mb-2">
+                                A sorted list of Document IDs that contain the term.
+                                <br />
+                                Constraint: <strong>Must be sorted.</strong> Solving complex queries depends on this sort order (like merging two sorted arrays).
+                            </p>
+                            <div className="mt-3 pt-3 border-t border-zinc-200 text-xs text-zinc-500">
+                                <strong>Logically:</strong> <code>[docID, freq, positions, payload]</code>
+                                <br />
+                                <strong>Physically:</strong> The hot path touches docID always, freq sometimes, positions almost never. This separation is critical for memory locality.
                             </div>
                         </div>
+                        <div className="bg-zinc-50 border border-zinc-200 p-4 rounded-lg">
+                            <h3 className="font-bold flex items-center gap-2 mb-2">
+                                <Box className="w-4 h-4 text-amber-600" />
+                                3. Block Index / Skip Data
+                            </h3>
+                            <p className="text-sm text-zinc-600 mb-2">
+                                Large postings lists are not flat arrays. They are split into fixed-size blocks (e.g., 128 docIDs).
+                                <br />
+                                Each block stores: <code>maxDocID</code>, compressed payload, and skip offsets.
+                                <br />
+                                <strong>Why?</strong> This enables block-level skipping, galloping, and avoiding decompression of blocks that cannot intersect. Modern retrieval is block-oriented, not integer-oriented.
+                            </p>
+                        </div>
                     </div>
-                    {/* Visualizer Placeholder */}
                     <div className="bg-zinc-900 rounded-xl p-6 text-zinc-300 font-mono text-sm border border-zinc-800">
                         <div className="text-zinc-500 mb-4">// Physical Layout on Disk</div>
 
@@ -372,13 +387,9 @@ export default function BooleanRetrieval() {
                     <div className="p-4 bg-zinc-800 rounded border border-zinc-700 italic text-center text-zinc-200">
                         "Only visit blocks that are even capable of producing competitive documents."
                     </div>
-                    <div className="mt-4 text-xs text-zinc-500 text-center">
-                        (This is where traversal begins to blend into ranking-aware retrieval.)
-                    </div>
                 </div>
             </section>
 
-            {/* 7. Life Cycle of a Query */}
             {/* 7. Life Cycle of a Query (Redesigned) */}
             <section className="space-y-12">
                 <div className="space-y-4">
@@ -607,7 +618,7 @@ export default function BooleanRetrieval() {
                     </div>
                 </div>
 
-            </section>
+            </section >
 
             <KeyTakeaways takeaways={takeaways} />
 
