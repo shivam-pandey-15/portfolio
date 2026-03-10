@@ -93,6 +93,9 @@ export const searchNavConfig: NavItem[] = [
             { title: "6.7 Hybrid ranking", href: "/search/vector-search/hybrid-ranking" },
             { title: "6.8 Failure modes", href: "/search/vector-search/failures" },
             { title: "6.9 Cost at scale", href: "/search/vector-search/cost" },
+            { title: "6.10 Chunking strategies", href: "/search/vector-search/chunking" },
+            { title: "6.11 Vector databases", href: "/search/vector-search/databases" },
+            { title: "6.12 Evaluating quality", href: "/search/vector-search/evaluation" },
         ]
     },
     {
