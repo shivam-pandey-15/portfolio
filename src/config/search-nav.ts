@@ -107,7 +107,7 @@ export const searchNavConfig: NavItem[] = [
             { title: "7.3 Contrastive learning", href: "/search/embedding-training/contrastive" },
             { title: "7.4 Fine-tuning strategies", href: "/search/embedding-training/fine-tuning" },
             { title: "7.5 Evaluation metrics", href: "/search/embedding-training/evaluation" },
-            { title: "7.6 Production deployment", href: "/search/embedding-training/production" },
+            { title: "7.6 Production deployment", href: "/search/embedding-training/deployment" },
         ]
     },
     {
